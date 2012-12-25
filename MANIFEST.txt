@@ -1,0 +1,34 @@
+What is this?
+=============
+
+This file describes the purpose of the several subdirectories that
+exist in a default project tree. It is aimed at helping you to
+understand how a project is organised internally, and wants to ease
+the process of customising the default project skeleton created. First
+off, the skeleton created for each project can be found in the
+<INSTALL_DIR>/data/skeleton directory. Everything in that directory
+will be copied when creating a new project; be careful when modifying
+it, so that you don’t accidentally remove required files. The exact
+semantic definitions for the directories are as follows:
+
+Files and directories and their meaning
+=======================================
+
+Path                    Description
+-----------------------------------
+/                       Project root directory.
+  - MANIFEST.txt        This file.
+  bin/                  Contains the main file.
+    - name_of_proj.rmk  Project main file, containg name, version, etc. It will be renamed according to your project’s name.
+  data/                 External project data
+    - categories.xml    Categories (items, skills, etc.) used in a project.
+    resources/          Graphics, music, etc.
+      audio/            Sounds and music.
+      graphics/         Characters, tilesets...
+    maps/               Actual maps.
+      - maps.xml        Map hierarchy file, specifies which maps are submaps of other maps.
+    scripts/            Global scripts loaded prior to game start. These are those you can create via the "normal" GUI, don’t confuse with the game core library in lib/!
+  lib/                  Game core library, i.e. battle and map handling code, etc. These can be edited from the advanced GUI with the Script Editor.
+
+For a more thorough documentation, see the OpenRubyRMK help or just
+ask us in #OpenRubyRMK on freenode.net.

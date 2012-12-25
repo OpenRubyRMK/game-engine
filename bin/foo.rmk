@@ -1,0 +1,8 @@
+---
+open_ruby_rmk:
+  version: 0.0.1-dev
+project:
+  name: Full name of the project
+  version: 0.0.1
+ui:
+  last_map: 

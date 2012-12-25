@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+  <properties>
+    <property name="name" value="Map_1"/>
+  </properties>
+  <tileset firstgid="1" name="gimp" tilewidth="32" tileheight="32" spacing="0" margin="0">
+    <properties/>
+    <image source="../resources/graphics/tilesets/gimp.png" width="256" height="576"/>
+  </tileset>
+  <layer name="Ground" width="20" height="15">
+    <properties/>
+    <data encoding="base64" compression="zlib">eJxjZmBgYB5hmAUNkyuOLE8NNjFqqe0+XOqxiRPrF3S9uMSJ8Rc54UdtzEQh
+Huj0PpwwAL6oA6U=
+</data>
+  </layer>
+</map>
