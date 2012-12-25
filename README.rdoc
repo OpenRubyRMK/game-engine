@@ -1,0 +1,3 @@
+= OpenRubyRMK Game Engine
+
+This is what makes your games actually run :-).
