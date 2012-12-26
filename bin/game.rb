@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'gosu'
 require 'tiled_tmx'
@@ -35,7 +37,7 @@ class GameWindow < Gosu::Window
 		projectfile = YAML.load_file(bindir + "foo.rmk")
 		self.caption = projectfile["project"]["name"]
 
-		@map = TiledTmx::Map.load_xml(mapdir + "0002.tmx")
+		@map = TiledTmx::Map.load_xml(mapdir + "0001.tmx")
 	end
 	
 	def draw

@@ -1,0 +1,31 @@
+GIT
+  remote: git://github.com/Quintus/tmx-ruby.git
+  revision: 9464802bec1698dcef58468a63f0b6c2b2db9406
+  specs:
+    ruby-tmx (0.0.1.dev)
+      nokogiri
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ansi (1.4.3)
+    gosu (0.7.45)
+    json (1.7.5)
+    nokogiri (1.5.6)
+    paint (0.8.5)
+    rake (10.0.3)
+    rdoc (3.12)
+      json (~> 1.4)
+    turn (0.9.6)
+      ansi
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  gosu
+  paint
+  rake
+  rdoc
+  ruby-tmx!
+  turn
