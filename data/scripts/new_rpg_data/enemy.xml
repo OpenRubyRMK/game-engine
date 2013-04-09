@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<enemy name="enemy">
+  <stats>
+    <stat name="atk">1</stat>
+    <stat name="spi">2</stat>
+    <stat name="def">3</stat>
+    <stat name="agi">4</stat>
+  </stats>
+  <elements>
+    <element name="el">0.5</element>
+  </elements>
+</enemy>
+

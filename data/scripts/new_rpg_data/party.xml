@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<party name="party">
+<members>
+	<member name="Alex">
+	<actorclasses>
+		<actorclass name="Warrior">
+			<elements>
+				<element name="fire">0.5</element>
+			</elements>
+			<skills>
+				<skill name="fireball" level="5"/>
+			</skills>
+		</actorclass>
+	</actorclasses>
+</member>
+<member name="Mira">
+<actorclasses><actorclass name="Mage"/></actorclasses>
+</member>
+</members>
+</party>

@@ -1,0 +1,51 @@
+Juujin
+
+
+Equipment
+-hands
+--offhand (if the first weapon is a sword, the second must be a little sword)
+--offhand malus
+---ability should chould lower the malus
+--barehand boost
+---ability should chould raise the plus
+-cursed
+
+Weapon Mastery
+-only works if weapon is equipped
+-skills disable if weapon is not equipped
+-- aktive if weapon is learned by other
+
+Requirement
+-
+-
+-Equipment
+--items equiped?
+--count free_hand
+--
+
+vampiric target
+
+battler hp & mp
+- skill hp mp cost
+- states mp hp cost multi (curse to turn mp cost in hp cost)
+- states raises battler hp mp
+- death state if hp reach 0
+
+skills needs:
+- inventar items (item werfen zb)
+- equipment (or attackable weapon (for ranged weapons))
+
+
+States
+- hidden => wichtig für KI brechnung
+
+KI:
+merkt sich jedes BaseItem das auf jeden Battler gemacht wird.
+wenn Hidden State entdeckt wird, berechnet die KI was die ursache sein könnte.
+
+-enemy machen weitere enemies wenn sie sterben
+-enemies können nicht angegriffen werden wenn bestimmte andere enemies im troop leben #(dead state?)
+-targets können auf items zielen und diese indeitifizieren
+
+Target
+Game-Targets können items aus inventar nutzen (für identifikation oder als schleuder)

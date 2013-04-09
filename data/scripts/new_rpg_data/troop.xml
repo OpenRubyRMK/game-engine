@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<troop name="party">
+<members>
+	<member name="Enemy">
+		<skills>
+			<skill name="fireball"/>
+		</skill>
+		<abilities>
+			<ability name="waterproof">
+				<defense_elements>
+					<element name="water">
+						<level level="1">0.8</level>
+						<level level="2">0.5</level>
+						<level level="3">0.3</level>
+					</element>
+				</defense_elements>
+			</ability>
+		</abilities>
+		<auto_states>
+			<state name="burn"/>
+		<auto_states>
+	</member>
+</members>
+</troop>

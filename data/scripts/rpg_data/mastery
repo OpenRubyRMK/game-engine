@@ -1,0 +1,90 @@
+module RPG
+	class Weapon_Mastery
+		attr_accessor :element
+		attr_accessor :skills #{skill => level }
+		attr_writer :icon,:name
+		def icon
+			return @icon.nil? ? @element.icon : @icon
+		end
+		def name
+			if @name.nil?
+				return @element.name
+			elsif L.exist?(@name)
+				return L[@name]
+			else
+				return @name
+			end
+		end
+	end
+	class ActorClass
+		attr_accessor :weapon_master # { RPG::Weapon_Mastery => raise_rate }
+	end
+end
+
+module Game
+
+	def self.make(obj)
+		return const_get(obj.class.name.split("::").last).new(obj)
+	end
+
+	class Weapon_Mastery
+		attr_accessor :level
+		
+		def initialize(item)
+			@data = item
+			@skills = {}
+			@data.skills.each{|skill,l| @skills[Game.make(skill)]=l}
+			@level = 0
+		end
+		def icon
+			return @data.icon
+		end
+		def name
+			return @data.name
+		end
+		def skills
+			return @skills.find_all{|*,t| t<=level }.map{|e,*| e}
+		end
+	end
+
+	class Battler
+		def skill_can_use?(skill)
+			
+		end
+	end
+
+	class Actor
+		
+		attr_reader :skills
+		
+		def init
+		
+			@skills = {}
+			@weapon_master = {}
+			actorclass.weapon_master.each {|w,*| @weapon_master[w]=Game.make(w)}
+		end
+		
+		def learn_skill(skill)#rpg::skill
+			@skills[skill]=Game.make(skill)
+		end
+		def skill_can_use?(skill)
+			return false if cs_skill_use_blacklist(skill).any?
+			#---
+		end
+		def weapon_mastery_skills
+			@weapon_master.map {|*,i| i.skills}
+		end
+		
+		def learn_cs_skill_use_blacklist(skill)
+			return !skill_learn?(skill)
+		end
+		def skill_learn?(skill)
+    	return true if @skills.include?(skill)
+    	return @skills.values.include?(skill)
+		end
+
+	end
+
+
+
+end

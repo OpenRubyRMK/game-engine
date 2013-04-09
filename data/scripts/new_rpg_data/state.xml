@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<states>
+<state name="burn">
+  <cancel>
+    <state name="frozen"/>
+  </cancel>
+  <chance>
+    <state name="frozen">0.5</state>
+  </chance>
+</state>
+<state name="frozen">
+  <cancel>
+    <state name="burn"/>
+  </cancel>
+  <chance>
+    <state name="burn">0.5</state>
+  </chance>
+</state>
+</states>

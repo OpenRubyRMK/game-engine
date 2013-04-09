@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<actors>
+<actor name="Alex">
+<actorclasses><actorclass name="Warrior"/></actorclasses>
+</actor>
+<actor name="Mira">
+<actorclasses><actorclass name="Mage"/></actorclasses>
+</actor>
+</actors>

@@ -1,0 +1,131 @@
+module RPG
+	class Equipment
+		attr_accessor :sockets,:offhand_malus,:barehand_boost,:hands,:fix_equipment,:dualhand_ability
+		def initialize
+			@sockets ={} #symbol => RPG::Socket
+			@offhand_malus = 0
+			@barehand_boost = 0
+			@hands = []#array of symbols
+			@fix_equipment = []
+			@dualhand_ability = {} #RPG::Atribute => level
+		end
+	end
+end
+
+module Game
+	class Battler
+		attr_reader :equipment
+		def equip_cs_init
+			if data.equipment
+				@equipment = Equipment.new(data.equipment,self)
+			end
+		end
+		def equip_cs_stats_add(stat)
+			return equipment ? equipment.send(stat) : 0
+		end
+				
+	end
+	class Equipment
+		def initialize(data,actor=nil)
+			@data=data
+			@actor=actor
+			@slots={}
+			@data.sockets.each {|sym,socket|
+				@slots[sym] = Socket.new(socket)
+				@slots[sym].name = sym
+			}
+		end
+		def free_hands
+			return @data.hands.count {|key| @slot[key].item.nil?}
+		end
+		def bare_hand?
+			return @data.hands.all? {|key| @slot[key].item.nil? || @slot[key].item.bare_hand}
+		end
+		def equip(slot,item)
+			return nil unless @slots.include?(slot)
+			return nil unless equipable?(slot,item)
+			#hand
+			return @slots[slot].item = item
+		end
+		def equipable?(slot,item)
+			return false unless @slots.include?(slot)
+			return false if !@slots[slot].item.nil? && @data.fix_equipment.include?(slot)
+			return false unless @slots[slot] === item
+			return cs_equipable?(slot,item).all?{|b| b == false}
+		end
+		
+		#hand
+		def hand_cs_equipable?(slot,item)
+			if item.respond_to?(:hands)
+				temp = free_hands
+				temp += @slots[slot].item.hands if !@slots[slot].item.nil? && @slots[slot].item.respond_to?(:hands)
+				return false if item.hands < temp
+				@data.dualhand_ability.each {|atribute,level|
+					return false if !@actor.atributes.include?(atribute) || @actor.atributes[atribute].level < level
+				}
+			end
+			#offhand
+			return true
+		end
+		
+		def unequip(slot)
+			return nil unless @slots.include?(slot)
+			return @slots[slot].item = nil
+		end
+		def equip?(item,slot=nil)
+			if item.is_a?(Game::BaseItem)
+				if slot.nil?
+					return !@slots.find {|key,slot| slot.item == item}.nil?
+				else
+					return false unless @slots.include?(slot)
+					@slots[slot].item == item
+				end
+			elsif item.is_a?(RPG::BaseItem)
+				if slot.nil?
+					return !@slots.find {|key,slot| slot.item.data == item}.nil?
+				else
+					return false unless @slots.include?(slot)
+					@slots[slot].item.data == item
+				end
+			else
+				return false
+			end
+		end
+		
+		def atk
+			temp=0
+			@slots.each {|key, socket|
+				unless (item = socket.item).nil?
+					temp1 = item.atk
+					cs_stats_item_multi(:atk,key,item){|i| temp1 *= i}
+					cs_stats_item_percent(:atk,key,item){|i| temp1 += i * item.atk }
+					cs_stats_item_add(:atk,key,item){|i| temp1 += i}
+
+					#offhand
+					if @data.hands.include?(key)
+						
+						#ability + offhand
+					end
+					temp += temp1
+				end
+			}
+			cs_stats_multi(:atk){|i| temp1 *= i}
+			#cs_stats_percent(:atk){|i| temp1 += i * item.atk }
+			cs_stats_add(:atk){|i| temp1 += i}
+			if bare_hand?
+				temp += @data.barehand_boost
+				#ability + barehand
+			end
+			return temp
+		end
+		def def
+			temp=0
+			@slots.values.map {|socket| socket.item}.each{|item|
+				unless item.nil?
+					temp += item.def
+				end
+			}
+			return temp
+		end
+	end
+end
