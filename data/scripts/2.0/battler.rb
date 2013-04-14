@@ -50,17 +50,17 @@ module Game
       #cs_stat_change(:mp,old)
     end
     
+    def stat(key,default=0)
+      temp = _stat_multi(key).inject(default,:*)
+      return _stat_add(key).inject(temp,:+)
+    end
+
     private
     def _stat_multi(key)
       []
     end
     def _stat_add(key)
       []
-    end
-    
-    def stat(key,default=0)
-      temp = _stat_multi(key).inject(default,:*)
-      return _stat_add(key).inject(temp,:+)
     end
   end
 end
