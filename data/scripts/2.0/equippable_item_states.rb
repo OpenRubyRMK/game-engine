@@ -2,11 +2,11 @@ require_relative "battler_equip"
 require_relative "battler_state"
 
 module RPG
-  module EquipableItem
+  module EquippableItem
     attr_accessor :states_chance,:auto_states,:require_states
 
     chain "EquipStatesInfluence" do
-      def _parse_xml_equipable(item)
+      def _parse_xml_equippable(item)
         super
         item.xpath("states_chance/state").each {|node|
           @states_chance[node[:name].to_sym] = node.text.to_f
@@ -22,14 +22,14 @@ module RPG
         }
       end
 
-      def _init_equipable
+      def _init_equippable
         super
         @auto_states = []
         @require_states = []
         @states_chance = Hash.new(1.0)
       end
 
-      def _to_xml_equipable(xml)
+      def _to_xml_equippable(xml)
         super
         xml.states_chance{
           @states_chance.each{|n,v| xml.state(v,:name=>n) }
@@ -47,14 +47,14 @@ module RPG
 end
 
 module Game
-  module EquipableItem
+  module EquippableItem
     attr_reader :auto_states
     def states_chance
     	rpg.states_chance
     end
     
 		chain "EquipStatesInfluence" do
-			def _init_equipable
+			def _init_equippable
 				super
 				@auto_states = rpg.auto_states.map{|n| State.new(n) }.group_by(&:name)
 			end

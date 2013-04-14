@@ -36,14 +36,14 @@ module RPG
       include Enumerable
       attr_reader :childs,:instances
       def parse_xml(path)
-        if(path.is_a?(Nokogiri::XML::Element))
+        if path.is_a?(Nokogiri::XML::Element)
           temp = new(path[:name].to_sym)
           temp.parse_xml(path)
           return temp
         end
         
         results = []
-        if(path.is_a?(Nokogiri::XML::Document))
+        if path.is_a?(Nokogiri::XML::Document)
           doc = path
         elsif(File.exist?(path))
           doc = Nokogiri::XML(File.read(path))

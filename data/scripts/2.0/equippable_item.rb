@@ -2,71 +2,70 @@ require_relative "base_item"
 
 module RPG
   class BaseItem
-    chain "EquipableItem" do
+    chain "EquippableItem" do
       def _parse_xml(item)
         super
-        item.xpath("equipable").each {|node|
-          extend(EquipableItem)
-          _parse_xml_equipable(node)
+        item.xpath("equippable").each {|node|
+          extend(EquippableItem)
+          _parse_xml_equippable(node)
         }
       end
     end
 
   end
 
-  module EquipableItem
+  module EquippableItem
     attr_reader :equip_stats
     def self.extended(obj)
       super
-      obj._init_equipable
+      obj._init_equippable
     end
 
-    def _init_equipable
+    def _init_equippable
       @equip_stats=Hash.new(0)
     end
 
     def initialize(*)
       super
-      _init_equipable
+      _init_equippable
     end
 
     def _to_xml(xml)
       super
-      xml.equipable{
+      xml.equippable{
         xml.stats{
           @equip_stats.each{|name,v|
             xml.stat(v,:name=>name)
           }
-          _to_xml_equipable_stats(xml)
+          _to_xml_equippable_stats(xml)
         }
-        _to_xml_equipable(xml)
+        _to_xml_equippable(xml)
       }
     end
-    
-    def _parse_xml_equipable(node)
+
+    def _parse_xml_equippable(node)
     end
   end
 end
 
 module Game
-  module EquipableItem
-  	def _init_equipable
-  	end
-  	
+  module EquippableItem
+    def _init_equippable
+    end
+
     def equip_stat(key)
       return stat(key,rpg.equip_stats[key],:equip)
     end
-    
+
     def self.extended(obj)
-    	super
-			obj._init_equipable
+      super
+      obj._init_equippable
     end
-    chain "EquipableItem" do
-    	def initialize(*)
-    		super
-				_init_equipable
-    	end
+
+    def initialize(*)
+      super
+      _init_equippable
     end
-    
+
   end
 end

@@ -4,7 +4,7 @@ require "turn/autorun"
 require_relative "../enemy_state"
 require_relative "../actor_state"
 
-require_relative "../equipable_item_states"
+require_relative "../equippable_item_states"
 
 require_relative "../weapon"
 
@@ -175,13 +175,11 @@ class StateTest < Test::Unit::TestCase
     assert_not_empty(gs.states(:freeze))
 
     gs.equip(:hand,sword)
-    
+
     assert_not_empty(gs.states)
     assert_not_empty(gs.states(:burn))
     assert_empty(gs.states(:freeze))
 
-   
-    
     gh=Game::Actor.new(:ralph)
 
     assert_empty(gh.states)
@@ -203,57 +201,54 @@ class StateTest < Test::Unit::TestCase
     assert_empty(gh.states(:burn))
     assert_empty(gh.states(:freeze))
   end
-  
-	def test_equip_states_chance
-	    sword = Game::Weapon.new(:sword)
-	
-	    assert_not_empty(sword.states_chance)
-	
-	    staff = Game::Weapon.new(:staff)
-	
-	    assert_empty(staff.states_chance)
-	
-	    gs=Game::Actor.new(:alex)
-	
-      assert_equal({:freeze => 0.5},gs.states_chance)
-      assert_equal(0.5,gs.states_chance(:freeze))
-      assert_equal(1.0,gs.states_chance(:fire))
 
-	
-	    gs.equip(:hand,staff)
-	
-      assert_equal({:freeze => 0.5},gs.states_chance)
-      assert_equal(0.5,gs.states_chance(:freeze))
-      assert_equal(1.0,gs.states_chance(:fire))
-	
-	    gs.equip(:hand,sword)
-	    
-      assert_equal({:freeze => 0.25},gs.states_chance)
-      assert_equal(0.25,gs.states_chance(:freeze))
-      assert_equal(1.0,gs.states_chance(:fire))
-	
-	   
-	    
-	    gh=Game::Actor.new(:ralph)
-	
-      assert_equal({},gh.states_chance)
-      assert_equal(1.0,gh.states_chance(:freeze))
-      assert_equal(1.0,gh.states_chance(:fire))
-	
-	    #assert_not_empty(staff.states(:burn))
-	    #assert_empty(gh.states(:freeze))
-	
-	    gh.equip(:hand,staff)
-	
-      assert_equal({},gh.states_chance)
-      assert_equal(1.0,gh.states_chance(:freeze))
-      assert_equal(1.0,gh.states_chance(:fire))
-	
-	    gh.equip(:hand,sword)
-	
-      assert_equal({:freeze => 0.5},gh.states_chance)
-      assert_equal(0.5,gh.states_chance(:freeze))
-      assert_equal(1.0,gh.states_chance(:fire))
-	  end
+  def test_equip_states_chance
+    sword = Game::Weapon.new(:sword)
+
+    assert_not_empty(sword.states_chance)
+
+    staff = Game::Weapon.new(:staff)
+
+    assert_empty(staff.states_chance)
+
+    gs=Game::Actor.new(:alex)
+
+    assert_equal({:freeze => 0.5},gs.states_chance)
+    assert_equal(0.5,gs.states_chance(:freeze))
+    assert_equal(1.0,gs.states_chance(:fire))
+
+    gs.equip(:hand,staff)
+
+    assert_equal({:freeze => 0.5},gs.states_chance)
+    assert_equal(0.5,gs.states_chance(:freeze))
+    assert_equal(1.0,gs.states_chance(:fire))
+
+    gs.equip(:hand,sword)
+
+    assert_equal({:freeze => 0.25},gs.states_chance)
+    assert_equal(0.25,gs.states_chance(:freeze))
+    assert_equal(1.0,gs.states_chance(:fire))
+
+    gh=Game::Actor.new(:ralph)
+
+    assert_equal({},gh.states_chance)
+    assert_equal(1.0,gh.states_chance(:freeze))
+    assert_equal(1.0,gh.states_chance(:fire))
+
+    #assert_not_empty(staff.states(:burn))
+    #assert_empty(gh.states(:freeze))
+
+    gh.equip(:hand,staff)
+
+    assert_equal({},gh.states_chance)
+    assert_equal(1.0,gh.states_chance(:freeze))
+    assert_equal(1.0,gh.states_chance(:fire))
+
+    gh.equip(:hand,sword)
+
+    assert_equal({:freeze => 0.5},gh.states_chance)
+    assert_equal(0.5,gh.states_chance(:freeze))
+    assert_equal(1.0,gh.states_chance(:fire))
+  end
 
 end

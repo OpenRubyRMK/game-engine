@@ -1,6 +1,6 @@
 require_relative "battler"
 #require_relative "socket"
-require_relative "equipable_item"
+require_relative "equippable_item"
 
 module Game
   class Battler
