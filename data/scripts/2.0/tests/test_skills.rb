@@ -5,6 +5,8 @@ require "turn/autorun"
 require_relative "../enemy_skill"
 require_relative "../ability_skill"
 
+require_relative "../actorclass_skill"
+
 class SkillTest < Test::Unit::TestCase
   def self.startup
     sk = RPG::Skill.new(:fireball)
@@ -19,6 +21,12 @@ class SkillTest < Test::Unit::TestCase
     a = RPG::Ability.new(:fireart)
     a.add_level(1) {|lv| lv.skills << :fireball }
     #p a
+      
+    RPG::Actor.new(:alex)
+    ac = RPG::ActorClass.new(:warrior)
+    ac.add_level(1) {|lv| lv.skills << :fireball }
+    ac.add_level(2) {|lv| lv.skills << :iceball }
+        
   end
 
   def test_enemy_skills
@@ -78,6 +86,60 @@ class SkillTest < Test::Unit::TestCase
     assert_empty(f.skills(:fireball))
     assert_empty(gh.skills(:fireball))
     
+  end
+  
+  def test_skills_actorclass
+    ga=Game::Actor.new(:alex)
+    
+    assert_empty(ga.skills)
+    
+    ga.add_actorclass(:warrior)
+    ac = ga.actorclasses[:warrior]
+    
+    assert_empty(ga.skills)
+    assert_empty(ac.skills)
+    assert_empty(ga.skills(:fireball))
+    assert_empty(ac.skills(:fireball))
+    assert_empty(ga.skills(:iceball))
+    assert_empty(ac.skills(:iceball))
+    
+    ac.level += 1 #now level 1 learned fireball
+
+    assert_not_empty(ga.skills)
+    assert_not_empty(ac.skills)
+    assert_not_empty(ga.skills(:fireball))
+    assert_not_empty(ac.skills(:fireball))
+    assert_empty(ga.skills(:iceball))
+    assert_empty(ac.skills(:iceball))
+
+    ac.level += 1 #now level 2 learned iceball
+
+    assert_not_empty(ga.skills)
+    assert_not_empty(ac.skills)
+    assert_not_empty(ga.skills(:fireball))
+    assert_not_empty(ac.skills(:fireball))
+    assert_not_empty(ga.skills(:iceball))
+    assert_not_empty(ac.skills(:iceball))
+    
+    ga.remove_actorclass(:warrior) #remove actorclass, alex lose the learned skills
+
+    assert_empty(ga.skills)
+    assert_not_empty(ac.skills)
+    assert_empty(ga.skills(:fireball))
+    assert_not_empty(ac.skills(:fireball))
+    assert_empty(ga.skills(:iceball))
+    assert_not_empty(ac.skills(:iceball))
+      
+    ga.add_actorclass(:warrior) #add actorclass again, alex gets the loosed skills
+    
+    assert_not_empty(ga.skills)
+    assert_not_empty(ac.skills)
+    assert_not_empty(ga.skills(:fireball))
+    assert_not_empty(ac.skills(:fireball))
+    assert_not_empty(ga.skills(:iceball))
+    assert_not_empty(ac.skills(:iceball))
+        
+
   end
 
 end

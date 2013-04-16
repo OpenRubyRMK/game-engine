@@ -1,4 +1,5 @@
 require_relative "battler_ability"
+require_relative "battler_skill"
 require_relative "levelable_skill"
 
 module Game
