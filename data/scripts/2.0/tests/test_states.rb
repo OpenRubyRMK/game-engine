@@ -6,6 +6,9 @@ require_relative "../actor_state"
 
 require_relative "../equippable_item_states"
 
+require_relative "../enemy_equip"
+require_relative "../actor_equip"
+
 require_relative "../weapon"
 
 class StateTest < Test::Unit::TestCase
@@ -29,6 +32,16 @@ class StateTest < Test::Unit::TestCase
 
     e = RPG::Enemy.new(:human)
 
+    e = RPG::Enemy.new(:ogre)
+    e.equips[:hand] = :axe
+
+    e = RPG::Enemy.new(:whyzard)
+    e.equips[:hand] = :staff
+
+    e = RPG::Enemy.new(:guard)
+    e.equips[:hand] = :sword
+
+    
     a = RPG::Actor.new(:alex)
     a.auto_states << :burn
     #e.states_chance[:freeze] = 0.5
@@ -38,11 +51,22 @@ class StateTest < Test::Unit::TestCase
 
     a = RPG::Actor.new(:ralph)
 
+    a = RPG::Actor.new(:jeff)
+    a.equips[:hand] = :sword
+    
+    a = RPG::Actor.new(:natan)
+    a.equips[:hand] = :staff
+        
+    a = RPG::Actor.new(:brian)
+    a.equips[:sword] = :axe
+    
     sw = RPG::Weapon.new(:sword)
     sw.states_chance[:freeze] = 0.5
 
     st = RPG::Weapon.new(:staff)
     st.auto_states << :freeze
+    ax = RPG::Weapon.new(:axe)
+    ax.auto_states << :burn
   end
 
   def test_enemy_state_chance
@@ -125,7 +149,57 @@ class StateTest < Test::Unit::TestCase
     assert_empty(gh.states(:freeze))
 
   end
+  
+  def test_enemy_equip_auto_states
 
+    go = Game::Enemy.new(:ogre)
+    
+    assert_not_empty(go.equips)
+    assert_not_empty(go.states)
+    assert_not_empty(go.states(:burn))
+    assert_empty(go.states(:freeze))
+
+    gw = Game::Enemy.new(:whyzard)
+
+    assert_not_empty(gw.equips)
+    assert_not_empty(gw.states)
+    assert_empty(gw.states(:burn))
+    assert_not_empty(gw.states(:freeze))
+
+    gg = Game::Enemy.new(:guard)
+
+    assert_not_empty(gg.equips)
+    assert_empty(gg.states)
+    assert_empty(gg.states(:burn))
+    assert_empty(gg.states(:freeze))
+        
+  end
+
+
+  def test_actor_equip_auto_states
+
+    gj = Game::Actor.new(:jeff)
+    
+    assert_not_empty(gj.equips)
+    assert_empty(gj.states)
+    assert_empty(gj.states(:burn))
+    assert_empty(gj.states(:freeze))
+
+    gn = Game::Actor.new(:natan)
+    
+    assert_not_empty(gn.equips)
+    assert_not_empty(gn.states)
+    assert_empty(gn.states(:burn))
+    assert_not_empty(gn.states(:freeze))
+
+    gb = Game::Actor.new(:brian)
+    
+    assert_not_empty(gb.equips)
+    assert_not_empty(gb.states)
+    assert_not_empty(gb.states(:burn))
+    assert_empty(gb.states(:freeze))
+  end
+  
   def test_actor_auto_states
     gs=Game::Actor.new(:alex)
 
@@ -164,24 +238,36 @@ class StateTest < Test::Unit::TestCase
 
     gs=Game::Actor.new(:alex)
 
+    assert_empty(gs.equips)
     assert_not_empty(gs.states)
     assert_not_empty(gs.states(:burn))
     assert_empty(gs.states(:freeze))
 
     gs.equip(:hand,staff)
 
+    assert_not_empty(gs.equips)
     assert_not_empty(gs.states)
     assert_not_empty(gs.states(:burn))
     assert_not_empty(gs.states(:freeze))
 
     gs.equip(:hand,sword)
 
+    assert_not_empty(gs.equips)
     assert_not_empty(gs.states)
     assert_not_empty(gs.states(:burn))
     assert_empty(gs.states(:freeze))
 
-    gh=Game::Actor.new(:ralph)
+    gs.equip(:hand,nil)
+    
+    assert_empty(gs.equips)
+    assert_not_empty(gs.states)
+    assert_not_empty(gs.states(:burn))
+    assert_empty(gs.states(:freeze))
 
+    
+    gh=Game::Actor.new(:ralph)
+    
+    assert_empty(gh.equips)    
     assert_empty(gh.states)
     assert_empty(gh.states(:burn))
     assert_empty(gh.states(:freeze))
@@ -191,15 +277,25 @@ class StateTest < Test::Unit::TestCase
 
     gh.equip(:hand,staff)
 
+    assert_not_empty(gh.equips)
     assert_not_empty(gh.states)
     assert_empty(gh.states(:burn))
     assert_not_empty(gh.states(:freeze))
 
     gh.equip(:hand,sword)
-
+    
+    assert_not_empty(gh.equips)    
     assert_empty(gh.states)
     assert_empty(gh.states(:burn))
     assert_empty(gh.states(:freeze))
+
+    gh.equip(:hand,nil)
+    
+    assert_empty(gh.equips)    
+    assert_empty(gh.states)
+    assert_empty(gh.states(:burn))
+    assert_empty(gh.states(:freeze))
+
   end
 
   def test_equip_states_chance

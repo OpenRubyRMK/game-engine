@@ -1,4 +1,5 @@
 require_relative "base_item"
+require_relative "chain_module"
 
 module RPG
   class BaseItem

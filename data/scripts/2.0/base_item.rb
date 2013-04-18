@@ -10,7 +10,9 @@ module RPG
       @price=0
       super
     end
-
+    def newGameObj
+      return Game.const_get(self.class.name.split("::").last).new(@name)
+    end
   end
 end
 
