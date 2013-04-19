@@ -67,32 +67,35 @@ module Game
     end
 
     def add_actorclass(k)
-      if @removed_actorclasses.include?(k)
-        @actorclasses[k] = @removed_actorclasses.delete(k)
-      else
-        @actorclasses[k] ||= ActorClass.new(k,self)
-      end
-      #cs_add_actorclass(k)
+      notify_observers(:added_actorclass) {
+        if @removed_actorclasses.include?(k)
+          @actorclasses[k] = @removed_actorclasses.delete(k)
+        else
+          @actorclasses[k] ||= ActorClass.new(k,self)
+        end
+      }
       return self
     end
 
     def remove_actorclass(k)
       if @actorclasses.include?(k)
-        @removed_actorclasses[k] = @actorclasses.delete(k)
+        notify_observers(:remove_actorclass) {
+          @removed_actorclasses[k] = @actorclasses.delete(k)
+        }
         #cs_remove_actorclass(k)
       end
       return self
     end
   end
 
-  class ActorClass
-    attr_reader :name
+  class ActorClass < BaseObject
+
     attr_reader :actor
     attr_accessor :level
 
-    prepend Levelable
+    include Levelable
     def initialize(name,actor)
-      @name = name
+      super(name)
       @actor = actor
       @level = 0
       @exp = 0

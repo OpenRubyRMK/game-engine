@@ -35,22 +35,22 @@ module Game
     end
     
     def add_state(k)
-      temp = State.new(k)
-      if(@states[k].size > temp.rpg.stocks)
-        @states[k].shift
-      end
-      #states_cancel
-      temp.rpg.states_cancel.each {|c|  @states[c].each{remove_state(c)} }
-      @states[k] += [temp]
-      #cs_add_state(k)
-      return temp
+			return notify_observers(:added_state) {
+        temp = State.new(k)
+        if(@states[k].size > temp.rpg.stocks)
+        	remove_state(k)
+        end
+        #states_cancel
+        temp.rpg.states_cancel.each {|c|  @states[c].each{remove_state(c)} }
+        @states[k] += [temp]
+        
+        temp
+      }
     end
     
     def remove_state(k)
       unless(@states[k].empty?)
-        temp = @states[k].shift
-        #cs_remove_state(k)
-        return temp
+      	return notify_observers(:removed_state) { @states[k].shift }
       else
         return nil
       end

@@ -5,10 +5,9 @@ module Game
   class Battler
     attr_reader :abilities
     def add_ability(k)
-      temp = Ability.new(k,self)
-      @abilities[k] = temp
-      #cs_add_abilitiy(k)
-      return temp
+      return notify_observers(:added_ability) {
+        @abilities[k] = Ability.new(k,self)
+      }
     end
     chain "AbilityInfluence" do
       def initialize(*)

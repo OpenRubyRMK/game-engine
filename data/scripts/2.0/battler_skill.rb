@@ -23,17 +23,15 @@ module Game
     end
     
     def add_skill(k)
-      temp = Skill.new(k)
-      @skills[k] += [temp]
-      #cs_add_skill(k)
-      return temp
+			return notify_observers(:added_skill) {
+  			@skills[k] += [temp = Skill.new(k)]
+  			temp
+  		}
     end
     
     def remove_skill(k)
       unless(@skills[k].empty?)
-        temp = @skills[k].shift
-        #cs_remove_skill(k)
-        return temp
+      	return notify_observers(:removed_skill) { @skills[k].shift }
       else
         return nil
       end

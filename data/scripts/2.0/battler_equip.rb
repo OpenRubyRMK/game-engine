@@ -6,8 +6,12 @@ module Game
   class Battler
     def equip(slot,item)
       #cs_unequiped(slot,@sockets[slot]) unless @sockets[slot].nil?
-      @sockets[slot]=item
-      #cs_equiped(slot,item)
+			
+    	notify_observers(:equiped) {
+				@sockets[slot]=item
+				{:slot => slot, :item => item}
+			}
+      
       return self
     end
 
