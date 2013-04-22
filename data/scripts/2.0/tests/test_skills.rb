@@ -1,6 +1,4 @@
 require "test/unit"
-require "turn/autorun"
-
 
 require_relative "../enemy_skill"
 require_relative "../ability_skill"

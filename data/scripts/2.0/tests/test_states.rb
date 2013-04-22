@@ -1,5 +1,4 @@
 require "test/unit"
-require "turn/autorun"
 
 require_relative "../enemy_state"
 require_relative "../actor_state"
