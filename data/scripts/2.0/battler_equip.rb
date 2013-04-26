@@ -47,6 +47,9 @@ module Game
       def _stat_add(stat)
         super + equips.values.map{|item| item.equip_stat(stat)}
       end
+      def _stat_multi(stat)
+        super + equips.values.map{|item| item.equip_stat_multi(stat)}
+      end
     end
   end
 end

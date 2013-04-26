@@ -57,7 +57,7 @@ module Game
     end
     
     def _states(key = nil)
-      return key ? @states[key] : @states.values.flatten
+      return key ? @states[key] : (@states || {}).values.flatten
     end
     
     def _states_chance(key=nil)

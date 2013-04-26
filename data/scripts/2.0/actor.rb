@@ -1,7 +1,7 @@
 require_relative "battler"
-require_relative "base_object"
+require_relative "base_item"
 module RPG
-  class Actor < BaseObject
+  class Actor < BaseItem
     
   end
 end

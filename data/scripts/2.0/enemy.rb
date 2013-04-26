@@ -1,7 +1,7 @@
 require_relative "battler"
-require_relative "base_object"
+require_relative "base_item"
 module RPG
-  class Enemy < BaseObject
+  class Enemy < BaseItem
     attr_reader :stats
     attr_reader :exp
     #translation :name

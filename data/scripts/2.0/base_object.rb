@@ -1,4 +1,4 @@
-#require "nokogiri"
+require "nokogiri"
 
 module RPG
   class BaseObject

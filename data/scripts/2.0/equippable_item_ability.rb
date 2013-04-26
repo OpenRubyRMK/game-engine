@@ -2,7 +2,7 @@ require_relative "battler_equip"
 require_relative "battler_ability"
 
 module RPG
-	module EquipableItem
+	module EquippableItem
 		attr_accessor :required_abilities,:level_abilities
 		
 		chain "EquipAbilityInfluence" do
@@ -36,4 +36,14 @@ module RPG
   		end
 		end
 	end
+end
+
+module Game
+  class Ability
+    chain "EquipAbilityInfluence" do
+      def _level
+        super + @battler.equips.map {|k,e| e.rpg.level_abilities[@name]}
+      end
+    end
+  end
 end

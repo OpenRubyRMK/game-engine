@@ -27,7 +27,7 @@ module RPG
     end
   end
 
-  class ActorClass < BaseObject
+  class ActorClass < BaseItem
     include Levelable
     #    attr_accessor :exp_multiplicator
     #    attr_accessor :exp
