@@ -6,7 +6,7 @@ require_relative "chain_module"
 module Game
   class Battler
     
-    chain "StatsInfluence" do
+    chain "SkillInfluence" do
       def initialize(*)
         super
         @skills ||= Hash.new([])
@@ -19,7 +19,7 @@ module Game
     end
 
     def skills(key=nil)
-      _skills(key).group_by(&:name)
+      key ? _skills(key) : _skills(key).group_by(&:name)
     end
     
     def add_skill(k)
