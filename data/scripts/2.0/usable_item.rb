@@ -57,7 +57,7 @@ module Game
     end
 
     def usable?
-      return @uses > 0
+      return @uses ? @uses > 0 : true
     end
 
     def uses=(value)
@@ -66,7 +66,7 @@ module Game
     end
 
     def _init_usable
-      @uses = rpg.max_uses
+			fill_uses
     end
 
     def self.extended(obj)
