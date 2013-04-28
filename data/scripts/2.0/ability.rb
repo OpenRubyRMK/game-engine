@@ -1,4 +1,5 @@
 require_relative "base_object"
+require_relative "game_object"
 require_relative "levelable"
 
 
@@ -9,14 +10,13 @@ module RPG
 end
 
 module Game
-  class Ability
-    prepend Levelable
+  class Ability < BaseObject
+    include Levelable
     
-    attr_reader :name,:battler
+    attr_reader :battler
     attr_accessor :baselevel
     def initialize(name,battler)
-      #super
-      @name = name
+      super(name)
       @battler = battler
       @baselevel = 0
     end
