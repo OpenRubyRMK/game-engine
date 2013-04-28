@@ -17,6 +17,8 @@ module RPG
 
   module EquippableItem
     attr_reader :equip_stats, :equip_stats_multi
+
+    attr_accessor :equip_type
     def self.extended(obj)
       super
       obj._init_equippable
@@ -44,11 +46,12 @@ module RPG
     def _to_xml_equippable_stats_multi(xml)
       xml.stats_multi{ @equip_stats_multi.each{|name,v| xml.stat(v,:name=>name) }}
     end
-    
+
     def _to_xml_equippable(xml)
       _to_xml_equippable_stats(xml)
       _to_xml_equippable_stats_multi(xml)
     end
+
     def _parse_xml_equippable(node)
     end
   end
@@ -67,7 +70,10 @@ module Game
       return stat_multi(key,rpg.equip_stats_multi[key],:equip)
     end
 
-    
+    def equip_type
+      rpg.equip_type
+    end
+
     def self.extended(obj)
       super
       obj._init_equippable
