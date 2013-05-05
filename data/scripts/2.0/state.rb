@@ -1,4 +1,5 @@
 require_relative "base_object"
+
 module RPG
   class State < BaseObject
 
@@ -12,9 +13,9 @@ module RPG
       @states_chance = Hash.new(1.0)
       @stocks=0
     end
-    
+
     def _to_xml(xml)
-      #xml.state(:name => @name,:stocks=>@stocks) { 
+      #xml.state(:name => @name,:stocks=>@stocks) {
       xml.cancel { @states_cancel.each {|s| xml.state(:name=>s) }}
       xml.chance { @states_chance.each {|s,v| xml.state(v,:name=>s) }}
     end
@@ -37,10 +38,11 @@ module Game
     def initialize(name)
       @name = name
     end
+
     def rpg
       return RPG::State[@name]
     end
-    
+
     def states_chance
       return rpg.states_chance
     end

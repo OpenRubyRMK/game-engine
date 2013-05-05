@@ -6,16 +6,16 @@ module Game
   class Battler
     def equip(slot,item)
       #cs_unequiped(slot,@sockets[slot]) unless @sockets[slot].nil?
-			
-    	notify_observers(:equiped) {
-				@sockets[slot]=item
-				{:slot => slot, :item => item}
-			}
-      
+
+      notify_observers(:equiped) {
+        @sockets[slot]=item
+        {:slot => slot, :item => item}
+      }
+
       return self
     end
 
-    def _can_equip?(slot,item)
+    def _can_equip(slot,item)
       return [true]
     end
 
@@ -31,7 +31,7 @@ module Game
 
     def equips
       #equipment_cs_init if @sockets.nil?
-			@sockets ||= {}
+      @sockets ||= {}
       return @sockets.reject{|k,v|v.nil?}
     end
 
@@ -43,10 +43,12 @@ module Game
           rpg.sockets.each{|s| add_socket(s) }
         end
       end
-			private
+      private
+
       def _stat_add(stat)
         super + equips.values.map{|item| item.equip_stat(stat)}
       end
+
       def _stat_multi(stat)
         super + equips.values.map{|item| item.equip_stat_multi(stat)}
       end

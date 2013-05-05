@@ -1,4 +1,5 @@
 require_relative "base_item"
+require_relative "chain_module"
 
 module RPG
   class BaseItem
@@ -66,7 +67,7 @@ module Game
     end
 
     def _init_usable
-			fill_uses
+      fill_uses
     end
 
     def self.extended(obj)

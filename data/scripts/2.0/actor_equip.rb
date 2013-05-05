@@ -14,7 +14,7 @@ module RPG
         super
         xml.equips {
           @equips.each {|k,v|
-            xml.item(:slot => k,:item => v);
+            xml.item(:slot => k,:item => v)
           }
         }
       end

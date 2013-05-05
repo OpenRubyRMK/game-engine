@@ -8,7 +8,7 @@ module RPG
     chain "AbilityInfluence" do
       def initialize(*)
         super
-      	@abilities = {}
+        @abilities = {}
       end
 
       def _to_xml(xml)

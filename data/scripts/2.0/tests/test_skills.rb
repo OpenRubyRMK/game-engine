@@ -18,13 +18,11 @@ class SkillTest < Test::Unit::TestCase
     #set abilities
     a = RPG::Ability.new(:fireart)
     a.add_level(1) {|lv| lv.skills << :fireball }
-    #p a
       
     RPG::Actor.new(:alex)
     ac = RPG::ActorClass.new(:warrior)
     ac.add_level(1) {|lv| lv.skills << :fireball }
     ac.add_level(2) {|lv| lv.skills << :iceball }
-        
   end
 
   def test_enemy_skills

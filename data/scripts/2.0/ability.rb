@@ -2,7 +2,6 @@ require_relative "base_object"
 require_relative "game_object"
 require_relative "levelable"
 
-
 module RPG
   class Ability < BaseObject
     include Levelable
@@ -12,7 +11,7 @@ end
 module Game
   class Ability < BaseObject
     include Levelable
-    
+
     attr_reader :battler
     attr_accessor :baselevel
     def initialize(name,battler)
@@ -20,17 +19,19 @@ module Game
       @battler = battler
       @baselevel = 0
     end
+
     def rpg
       return RPG::Ability[@name]
     end
-    
+
     def _level
       return []
     end
-    
+
     def level
       return _level.inject(@baselevel,:+)
     end
+
     def levelup(l = 1)
       @baselevel += l
       #cs_levelup

@@ -6,19 +6,19 @@ module RPG
     attr_accessor :level_abilities
 
     chain "StateAbilityInfluence" do
-      
       def initialize(*)
         super
         @level_abilities = Hash.new(0)
       end
+
       def _to_xml(xml)
         super
         xml.level_abilities {
           @level_abilities.each{|k,l| xml.ability(:name=>k,:value=>l) }
         }
-        
+
       end
-      
+
       def _parse_xml(item)
         super
         item.xpath("level_abilities/ability").each {|node|

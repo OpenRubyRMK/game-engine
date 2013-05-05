@@ -23,7 +23,7 @@ module Game
     def rpg
       raise NotImplementedError
     end
-    
+
     def notify_observers(event, info = {})
       if block_given?
         Game.changed

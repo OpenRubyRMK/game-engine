@@ -3,18 +3,20 @@ require_relative "battler_state"
 module RPG
   class State
     attr_accessor :stats
-    
+
     chain "StateStatsInfluence" do
       def initialize(*)
         super
         @stats = Hash.new(1.0)
       end
+
       def _to_xml(xml)
         super
         xml.stats {
           @stats.each{|k,v| xml.stat(v,:name=>k)}
         }
       end
+
       def parse_xml(enemy)
         super
         enemy.xpath("stats/stat").each {|node|

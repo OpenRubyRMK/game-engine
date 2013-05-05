@@ -1,13 +1,12 @@
 class AnonModule < Module
-  
+
   attr_reader :name
-  
   def initialize(klass,name,&block)
     super(&block)
     @name = name
     @klass = klass
   end
-  
+
   def inspect
     return @name ? "<#{self.class}:#@klass:#@name>" : super
   end

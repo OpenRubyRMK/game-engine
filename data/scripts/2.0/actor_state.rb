@@ -14,6 +14,7 @@ module RPG
         @states_chance = Hash.new(1.0)
         @dead_state = nil
       end
+
       def _to_xml(xml)
         super
         xml.states_chance{
@@ -23,9 +24,9 @@ module RPG
           @auto_states.each{|n| xml.state(:name=>n) }
         }
         xml.dead_state(:name=>@dead_state)
-        
+
       end
-          
+
       def _parse_xml(actor)
         super
         actor.xpath("states_chance/state").each {|node|
@@ -51,11 +52,11 @@ module Game
         super
         @auto_states = rpg.auto_states.map{|n| State.new(n) }.group_by(&:name)
       end
-      
+
       def _states(key)
-        super + (key ? @auto_states[key] || [] : @auto_states.values.flatten) 
+        super + (key ? @auto_states[key] || [] : @auto_states.values.flatten)
       end
-      
+
       def _states_chance(key)
         return super + [(key ? rpg.states_chance[key] : rpg.states_chance)]
       end

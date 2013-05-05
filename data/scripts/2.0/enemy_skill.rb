@@ -16,7 +16,6 @@ module RPG
         xml.skills{
           @skills.each{|k| xml.skill(:name=>k) }
         }
-
       end
 
       def _parse_xml(enemy)

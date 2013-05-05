@@ -11,6 +11,7 @@ module Game
       return k ? [] : {}
     end
   end
+
   class Battler
     chain "AbilitySkillInfluence" do
       def _skills(key)

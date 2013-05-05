@@ -8,19 +8,22 @@ module RPG
       @name = name
       self.class[name] = self
     end
+
     def to_sym
       return @name
     end
+
     def <=>(value)
       return @name <=> value.to_sym
     end
-    
+
     #methods needed no be overwritten or extended to add parsable stuff
     def _to_xml(xml)
     end
+
     def parse_xml(xml)
     end
-    
+
     def to_xml
       builder = Nokogiri::XML::Builder.new do |xml|
         n = self.class.name.split("::").last.downcase
@@ -30,8 +33,7 @@ module RPG
       end
       return builder.to_xml
     end
-    
-    
+
     class << self
       include Enumerable
       attr_reader :childs,:instances
@@ -41,7 +43,7 @@ module RPG
           temp.parse_xml(path)
           return temp
         end
-        
+
         results = []
         if path.is_a?(Nokogiri::XML::Document)
           doc = path
@@ -56,6 +58,7 @@ module RPG
         }
         return results
       end
+
       def each(&block)
         return to_enum(__method__) unless block_given?
         @instances ||= {}
@@ -64,6 +67,7 @@ module RPG
         @childs.each {|c| c.each(&block) }
         return self
       end
+
       def [](i)
         @instances ||= {}
         return @instances[i] if @instances.include?(i)
@@ -74,11 +78,12 @@ module RPG
         end
         return nil
       end
+
       def []=(i,o)
         @instances ||= {}
         @instances[i] = o
       end
-      
+
       def inherited(child)
         @childs ||= []
         @childs << child

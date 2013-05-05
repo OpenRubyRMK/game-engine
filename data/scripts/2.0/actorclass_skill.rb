@@ -8,11 +8,12 @@ module Game
       list = (0).upto(level).map {|l|
         l = @levels[l]
         l.nil? ? [] : k ? l.skills[k] : l.skills.values
-        }.compact.flatten
+      }.compact.flatten
 
       return k ? list : list.group_by(&:name)
     end
   end
+
   class Actor
     chain "ActorClassSkillInfluence" do
       def _skills(key)

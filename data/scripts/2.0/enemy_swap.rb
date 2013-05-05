@@ -1,5 +1,4 @@
 require_relative "enemy"
-
 require_relative "chain_module"
 
 module RPG
