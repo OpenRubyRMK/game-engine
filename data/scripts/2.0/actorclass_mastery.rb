@@ -31,7 +31,7 @@ module Game
   class ActorClass
     def mastery_rate(k=nil)
       temp = @levels[level]
-      temp = rpg.mastery_rate if temp.empty?
+      temp = rpg.mastery_rate if !temp || temp.empty?
       return k ? temp[k] :  temp
     end
   end

@@ -1,5 +1,5 @@
 require_relative "levelable"
-require_relative "skill"
+require_relative "mastery"
 
 module RPG
   module Levelable
