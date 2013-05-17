@@ -16,7 +16,7 @@ module Game
     end
 
     def _can_equip(slot,item)
-      return [true]
+      return [RPG::BaseItem[item].equip_requirement.check(self)]
     end
 
     def can_equip?(slot,item)

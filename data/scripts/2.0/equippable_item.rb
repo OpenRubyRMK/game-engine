@@ -1,5 +1,6 @@
 require_relative "base_item"
 require_relative "chain_module"
+require_relative "requirement"
 
 module RPG
   class BaseItem
@@ -17,8 +18,11 @@ module RPG
 
   module EquippableItem
     attr_reader :equip_stats, :equip_stats_multi
+    
+    attr_accessor :equip_requirement
 
     attr_accessor :equip_type
+    
     def self.extended(obj)
       super
       obj._init_equippable
@@ -27,6 +31,8 @@ module RPG
     def _init_equippable
       @equip_stats=Hash.new(0)
       @equip_stats_multi=Hash.new(1.0)
+      
+      @equip_requirement = Requirement.new
     end
 
     def initialize(*)
@@ -50,6 +56,10 @@ module RPG
     def _to_xml_equippable(xml)
       _to_xml_equippable_stats(xml)
       _to_xml_equippable_stats_multi(xml)
+      
+      xml.equip_requirement {
+        @equip_requirement.to_xml(xml)
+      }
     end
 
     def _parse_xml_equippable(node)
