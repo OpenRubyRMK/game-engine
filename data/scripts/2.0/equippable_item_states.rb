@@ -1,19 +1,17 @@
 require_relative "battler_equip"
 require_relative "battler_state"
 
+require_relative "requirement_states"
+
 module RPG
   module EquippableItem
-    attr_accessor :states_chance,:auto_states,:require_states
+    attr_accessor :states_chance,:auto_states
 
     chain "EquipStatesInfluence" do
       def _parse_xml_equippable(item)
         super
         item.xpath("states_chance/state").each {|node|
           @states_chance[node[:name].to_sym] = node.text.to_f
-        }
-        item.xpath("require_states/state").each {|node|
-          require_states << node[:name].to_sym
-          State.parse_xml(node) unless node.children.empty?
         }
 
         item.xpath("auto_states/state").each {|node|
@@ -25,7 +23,6 @@ module RPG
       def _init_equippable
         super
         @auto_states = []
-        @require_states = []
         @states_chance = Hash.new(1.0)
       end
 
@@ -34,9 +31,7 @@ module RPG
         xml.states_chance{
           @states_chance.each{|n,v| xml.state(v,:name=>n) }
         }
-        xml.require_states{
-          @require_states.each{|n| xml.state(:name=>n)}
-        }
+        
         xml.auto_states{
           @auto_states.each{|n| xml.state(:name=>n)}
         }
@@ -64,10 +59,6 @@ module Game
 
   class Battler
     chain "EquipStatesInfluence" do
-      def _can_equip(key,item)
-        super + [RPG::BaseItem[item].require_states.all? {|k|	!states(k).empty?	}]
-      end
-
       def _states(key)
         super + equips.each_value.map{|item|key ? item.auto_states[key]||[] : item.auto_states.values }.flatten
       end

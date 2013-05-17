@@ -1,10 +1,11 @@
 require "test/unit"
 
+require_relative "../enemy"
+
 require_relative "../equippable_item_ability"
 require_relative "../equippable_item_mastery"
 require_relative "../equippable_item_states"
 
-require_relative "../enemy"
 require_relative "../weapon"
 
 class EquipTest < Test::Unit::TestCase
@@ -16,10 +17,10 @@ class EquipTest < Test::Unit::TestCase
 
     w = RPG::Weapon.new(:fire_axe)
     w.equip_type = :axe
-    w.required_masteries[:axe] = 1
+    w.equip_requirement.masteries[:all][:axe] = 1
 
     w = RPG::Weapon.new(:twohandsword)
-    w.required_abilities[:twohand] = 1
+    w.equip_requirement.abilities[:all][:twohand] = 1
     
     
     RPG::Enemy.new(:warrior)
