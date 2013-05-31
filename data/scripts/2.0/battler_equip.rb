@@ -19,10 +19,18 @@ module Game
       return [RPG::BaseItem[item].equip_requirement.check(self)]
     end
 
+    def _item_indestructibly(item)
+      return [item.indestructibly]
+    end
+    
     def can_equip?(slot,item)
       return _can_equip(slot,item).all?
     end
 
+    def item_indestructibly?(item)
+      return _item_indestructibly(item).any?
+    end
+    
     def add_socket(slot)
       @sockets[slot]=nil
       #cs_socket_added(slot)

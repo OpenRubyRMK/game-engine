@@ -1,6 +1,7 @@
 require_relative "base_item"
 require_relative "chain_module"
 require_relative "requirement"
+require_relative "selector"
 
 module RPG
   class BaseItem
@@ -23,6 +24,10 @@ module RPG
 
     attr_accessor :equip_type
     
+    attr_accessor :durability
+    
+    attr_accessor :indestructibly
+    
     def self.extended(obj)
       super
       obj._init_equippable
@@ -33,6 +38,10 @@ module RPG
       @equip_stats_multi=Hash.new(1.0)
       
       @equip_requirement = Requirement.new
+      
+      @durability = nil
+      
+      @indestructibly = false
     end
 
     def initialize(*)
@@ -65,6 +74,26 @@ module RPG
     def _parse_xml_equippable(node)
     end
   end
+  
+  class Selector
+    attr_reader :equip_type
+    
+    chain "EquippableItemInfluence" do
+      def initialize
+        super
+        @equip_type = {:all => [], :any => [], :one => [], :none => [] } 
+      end
+      
+      def _check(item)
+        super + [check_value(@equip_type,item.equip_type)]
+      end
+      
+      def to_xml(xml)
+        super
+        _to_xml_value(xml,@equip_type,"type","equip_types")
+      end
+    end
+  end
 end
 
 module Game
@@ -83,7 +112,20 @@ module Game
     def equip_type
       rpg.equip_type
     end
+    
+    def max_durability
+      temp = rpg.durability
+      return temp ? stat(:max_durability,temp,:equip) : nil
+    end
 
+    def _indestructibly
+      [rpg.indestructibly]
+    end
+    
+    def indestructibly
+      _indestructibly.any?
+    end
+    
     def self.extended(obj)
       super
       obj._init_equippable

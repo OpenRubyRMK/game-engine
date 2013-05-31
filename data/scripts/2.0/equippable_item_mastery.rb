@@ -5,7 +5,7 @@ require_relative "requirement_mastery"
 
 module RPG
   module EquippableItem
-    attr_accessor :required_masteries,:level_masteries,:mastery_rate
+    attr_accessor :level_masteries,:mastery_rate
 
     chain "EquipMasteryInfluence" do
       def _init_equippable

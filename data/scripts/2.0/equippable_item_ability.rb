@@ -4,7 +4,7 @@ require_relative "requirement_ability"
 
 module RPG
   module EquippableItem
-    attr_accessor :required_abilities,:level_abilities
+    attr_accessor :level_abilities
 
     chain "EquipAbilityInfluence" do
       def _init_equippable
