@@ -22,13 +22,17 @@ module Game
     def _item_indestructibly(item)
       return [item.indestructibly]
     end
+
+    def _item_destructibly(item)
+      return [item.destructibly]
+    end
     
     def can_equip?(slot,item)
       return _can_equip(slot,item).all?
     end
 
     def item_indestructibly?(item)
-      return _item_indestructibly(item).any?
+      return _item_indestructibly(item).any? && _item_destructibly(item).none?
     end
     
     def add_socket(slot)

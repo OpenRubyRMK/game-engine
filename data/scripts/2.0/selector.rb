@@ -1,7 +1,8 @@
 module RPG
   class Selector
     def check(item)
-      return _check(item).all?
+      temp = _check(item).compact
+      return !temp.empty? && temp.all?
     end
 
     def _check(item)
@@ -13,8 +14,9 @@ module RPG
     end
 
     private
-    
+
     def check_value(var,item_attr)
+    return nil unless [:all,:any,:one,:none].any? {|type| _present?(var[type])}
       pr = proc{|v| item_attr  == v }
       (var[:all].nil? || var[:all].all?(&pr)) &&
       (var[:any].nil? || var[:any].empty? || var[:any].any?(&pr)) &&
@@ -30,6 +32,10 @@ module RPG
           }
         } if value[type] && !value[type].empty?
       }
+    end
+
+    def _present?(var)
+      (!var.nil? && !var.empty?)
     end
   end
 end

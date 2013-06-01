@@ -19,14 +19,15 @@ module RPG
 
   module EquippableItem
     attr_reader :equip_stats, :equip_stats_multi
-    
+
     attr_accessor :equip_requirement
 
     attr_accessor :equip_type
-    
+
     attr_accessor :durability
-    
+
     attr_accessor :indestructibly
+    attr_accessor :destructibly
     
     def self.extended(obj)
       super
@@ -36,12 +37,13 @@ module RPG
     def _init_equippable
       @equip_stats=Hash.new(0)
       @equip_stats_multi=Hash.new(1.0)
-      
+
       @equip_requirement = Requirement.new
-      
+
       @durability = nil
-      
+
       @indestructibly = false
+      @destructibly = false
     end
 
     def initialize(*)
@@ -65,7 +67,7 @@ module RPG
     def _to_xml_equippable(xml)
       _to_xml_equippable_stats(xml)
       _to_xml_equippable_stats_multi(xml)
-      
+
       xml.equip_requirement {
         @equip_requirement.to_xml(xml)
       }
@@ -73,23 +75,29 @@ module RPG
 
     def _parse_xml_equippable(node)
     end
+    
   end
-  
+
   class Selector
     attr_reader :equip_type
-    
+    attr_reader :name
+
     chain "EquippableItemInfluence" do
       def initialize
         super
-        @equip_type = {:all => [], :any => [], :one => [], :none => [] } 
+        @equip_type = {:all => [], :any => [], :one => [], :none => [] }
+        @name = {:all => [], :any => [], :one => [], :none => [] }
       end
-      
+
       def _check(item)
-        super + [check_value(@equip_type,item.equip_type)]
+        super +
+        [check_value(@equip_type,item.equip_type),
+          check_value(@name,item.name)]
       end
-      
+
       def to_xml(xml)
         super
+        _to_xml_value(xml,@name,"name","names")
         _to_xml_value(xml,@equip_type,"type","equip_types")
       end
     end
@@ -112,7 +120,7 @@ module Game
     def equip_type
       rpg.equip_type
     end
-    
+
     def max_durability
       temp = rpg.durability
       return temp ? stat(:max_durability,temp,:equip) : nil
@@ -121,11 +129,19 @@ module Game
     def _indestructibly
       [rpg.indestructibly]
     end
-    
-    def indestructibly
-      _indestructibly.any?
+
+    def _destructibly
+      []
     end
     
+    def indestructibly
+      _indestructibly.any? && _destructibly.none?
+    end
+    
+    def destructibly
+      _destructibly.any?
+    end
+
     def self.extended(obj)
       super
       obj._init_equippable

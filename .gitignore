@@ -1,2 +1,13 @@
+
+#eclipse project files
+.cproject
+.project
+.settings
+.buildpath
+
+#ignore temp files
+*.*~
+
+#ignore generated dirs
 doc/
 pkg/
