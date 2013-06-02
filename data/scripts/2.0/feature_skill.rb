@@ -1,8 +1,9 @@
-require_relative "enemy"
+require_relative "battler_feature"
 require_relative "battler_skill"
 
 module RPG
-  class Enemy
+  class Feature
+      
     attr_accessor :skills
     chain "SkillInfluence" do
       def initialize(*)
@@ -29,11 +30,23 @@ module RPG
 end
 
 module Game
-  class Enemy
+  class Feature
     chain "SkillInfluence" do
-      def initialize(*)
+      def initialize(rpg)
         super
-        rpg.skills.each {|n| add_skill(n)}
+        @skills = rpg.skills.map{|n| Skill.new(n) }.group_by(&:name)
+      end
+
+      def skills(key)
+        key ? @skills[key] || [] : @skills.values.flatten
+      end
+    end
+  end
+
+  class Battler
+    chain "FeatureSkillInfluence" do
+      def _skills(key)
+        super + features.map {|f| f.skills(key)}.flatten
       end
     end
   end
