@@ -19,8 +19,22 @@ module Game
 
     end
 
+    def _suspended_states
+      []
+    end
+    
+    def suspended_states
+      _suspended_states.uniq
+    end
+
+    def state_suspended?(key)
+      suspended_states.include?(key)
+    end
+
     def states(key=nil)
-      return _states(key).group_by(&:name)
+      return [] if key && state_suspended?(key)
+      list = _states(key)
+      return key ? list : list.group_by(&:name).select {|k,_| !state_suspended?(k) }
     end
 
     def states_chance(key=nil)

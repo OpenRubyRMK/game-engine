@@ -8,6 +8,9 @@ require_relative "../equippable_item_states"
 require_relative "../enemy_equip"
 require_relative "../actor_equip"
 
+require_relative "../state_feature"
+
+
 require_relative "../weapon"
 
 class StateTest < Test::Unit::TestCase
@@ -17,17 +20,20 @@ class StateTest < Test::Unit::TestCase
 
     s=RPG::State.new(:freeze)
 
+    #s=RPG::State.new(:burnprotection)
+    #s.features << RPG::Feature.new.tap {|f| f.suspend_states << :burn }
+    
     #st=RPG::Weapon.new(:staff)
     #st.states_chance[:freeze] = 0.5
     #warrior=RPG::ActorClass.new(:warrior)
     #warrior.states_chance[:freeze] = 0.5
 
     e = RPG::Enemy.new(:slime)
-    e.auto_states << :burn
+    e.features << RPG::Feature.new.tap{|f| f.auto_states << :burn}
     #e.states_chance[:freeze] = 0.5
 
     e = RPG::Enemy.new(:wizzard)
-    e.states_chance[:freeze] = 0.5
+    e.features << RPG::Feature.new.tap{|f| f.states_chance[:freeze] = 0.5 }
 
     e = RPG::Enemy.new(:human)
 
@@ -42,11 +48,11 @@ class StateTest < Test::Unit::TestCase
 
     
     a = RPG::Actor.new(:alex)
-    a.auto_states << :burn
+    a.features << RPG::Feature.new.tap{|f| f.auto_states << :burn }
     #e.states_chance[:freeze] = 0.5
 
     a = RPG::Actor.new(:mira)
-    a.states_chance[:freeze] = 0.5
+    a.features << RPG::Feature.new.tap{|f| f.states_chance[:freeze] = 0.5 }
 
     a = RPG::Actor.new(:ralph)
 
@@ -60,12 +66,15 @@ class StateTest < Test::Unit::TestCase
     a.equips[:sword] = :axe
     
     sw = RPG::Weapon.new(:sword)
-    sw.states_chance[:freeze] = 0.5
+    sw.equip_features << RPG::Feature.new.tap{|f| f.states_chance[:freeze] = 0.5 }
 
     st = RPG::Weapon.new(:staff)
-    st.auto_states << :freeze
+    st.equip_features << RPG::Feature.new.tap{|f| f.auto_states << :freeze}
     ax = RPG::Weapon.new(:axe)
-    ax.auto_states << :burn
+    ax.equip_features << RPG::Feature.new.tap{|f| f.auto_states << :burn}
+      
+    gl = RPG::Weapon.new(:fireglove)
+    gl.equip_features << RPG::Feature.new.tap {|f| f.suspend_states << :burn }
   end
 
   def test_enemy_state_chance
@@ -344,6 +353,46 @@ class StateTest < Test::Unit::TestCase
     assert_equal({:freeze => 0.5},gh.states_chance)
     assert_equal(0.5,gh.states_chance(:freeze))
     assert_equal(1.0,gh.states_chance(:fire))
+  end
+
+  def test_equip_state_suspend
+    axe = Game::Weapon.new(:axe)
+    glove = Game::Weapon.new(:fireglove)
+    
+    ga=Game::Actor.new(:alex)
+    
+    assert_empty(ga.suspended_states)
+    assert_not_empty(ga.states)
+    assert_not_empty(ga.states(:burn))
+      
+    ga.equip(:gloves,glove)
+    
+    assert_not_empty(ga.suspended_states)
+    assert_empty(ga.states)
+    assert_empty(ga.states(:burn))
+      
+    ga.equip(:hand,axe)
+    
+    assert_not_empty(ga.suspended_states)
+    assert_empty(ga.states)
+    assert_empty(ga.states(:burn))
+    
+    
+  end
+  
+  def test_state_state_suspend
+    ga=Game::Actor.new(:alex)
+
+    assert_empty(ga.suspended_states)
+    assert_not_empty(ga.states)
+    assert_not_empty(ga.states(:burn))
+      
+    ga.add_state(:burnprotection)
+    
+    assert_not_empty(ga.suspended_states)
+    assert_empty(ga.states)
+    assert_empty(ga.states(:burn))
+    
   end
 
 end

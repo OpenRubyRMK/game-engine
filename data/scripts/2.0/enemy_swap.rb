@@ -35,8 +35,8 @@ module Game
     chain "SwapEnemyInfluence" do
       def initialize(name)
         se = RPG::Enemy[name].swap_enemies
-        v = rand(0..se.values.inject(0,:+))
-        super(se.inject(nil){|m,(k,v)| break k if r < m.to_f + v; m.to_f + v} || name)
+        r = rand(0..se.values.inject(0,:+))
+        super(se.inject(nil){|m,(k,v)| break k if r <= m.to_f + v; m.to_f + v} || name)
       end
     end
   end

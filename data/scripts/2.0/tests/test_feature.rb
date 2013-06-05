@@ -1,6 +1,6 @@
 require "test/unit"
 
-require_relative "../enemy"
+require_relative "../enemy_feature"
 
 require_relative "../feature_state"
 require_relative "../feature_skill"
@@ -23,6 +23,8 @@ class FeatureTest < Test::Unit::TestCase
     w = RPG::Weapon.new(:mage_staff)
     w.equip_features << RPG::Feature.new.tap {|f| f.skills << :fireball }
     
+    e = RPG::Enemy.new(:dragon)
+    e.features << RPG::Feature.new.tap {|f| f.skills << :fireball }
   end
 
   def test_states
@@ -53,4 +55,16 @@ class FeatureTest < Test::Unit::TestCase
     assert_not_empty(g.skills(:fireball))
   end
 
+  def test_enemy
+    g = Game::Enemy.new(:warrior)
+
+    assert_empty(g.skills)
+    assert_empty(g.skills(:fireball))
+    
+    g = Game::Enemy.new(:dragon)
+    
+    assert_not_empty(g.skills)
+    assert_not_empty(g.skills(:fireball))
+
+  end
 end

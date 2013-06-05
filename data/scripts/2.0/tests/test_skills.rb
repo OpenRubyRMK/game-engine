@@ -11,7 +11,7 @@ class SkillTest < Test::Unit::TestCase
     sk = RPG::Skill.new(:iceball)
 
     en = RPG::Enemy.new(:slime)
-    en.skills << :fireball
+    en.features << RPG::Feature.new.tap{|f| f.skills << :fireball }
 
     en2 = RPG::Enemy.new(:human)
     

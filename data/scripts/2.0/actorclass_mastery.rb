@@ -39,7 +39,7 @@ module Game
   class Actor
     chain "ActorClassMasteryInfluence" do
       def _mastery_rate(key)
-        super + @actorclasses.each_value.map{|ac| mastery_rate(key) }
+        super + @actorclasses.each_value.map{|ac| ac.mastery_rate(key) }
       end
     end
   end

@@ -68,6 +68,14 @@ class MasteryTest < Test::Unit::TestCase
 
     assert_empty(g.skills)
     assert_empty(g.skills(:axe_slash))
+    
+    g.mastery[:axe].levelup 2
+
+    assert_equal(2,g.mastery[:axe].level)
+
+    assert_empty(g.skills)
+    assert_empty(g.skills(:axe_slash))
+    
   end
   
   def test_mastery_rate

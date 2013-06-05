@@ -6,7 +6,7 @@ module Game
   class Ability
     def skills(k=nil)
       if l = @levels[level]
-        return k ? l.skills[k] : l.skills
+        return l.skills(k)
       end
       return k ? [] : {}
     end

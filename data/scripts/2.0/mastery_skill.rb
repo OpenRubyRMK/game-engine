@@ -7,7 +7,7 @@ module Game
     def skills(k=nil)
       list = (0).upto(level).map {|l|
         l = @levels[l]
-        l.nil? ? [] : k ? l.skills[k] : l.skills.values
+        l.nil? ? [] : k ? l.skills(k) : l.skills(k).values
       }.compact.flatten
 
       return k ? list : list.group_by(&:name)
