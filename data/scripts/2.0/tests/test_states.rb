@@ -20,8 +20,8 @@ class StateTest < Test::Unit::TestCase
 
     s=RPG::State.new(:freeze)
 
-    #s=RPG::State.new(:burnprotection)
-    #s.features << RPG::Feature.new.tap {|f| f.suspend_states << :burn }
+    s=RPG::State.new(:burnprotection)
+    s.features << RPG::Feature.new.tap {|f| f.suspend_states << :burn }
     
     #st=RPG::Weapon.new(:staff)
     #st.states_chance[:freeze] = 0.5

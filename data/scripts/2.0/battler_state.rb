@@ -32,7 +32,13 @@ module Game
     end
 
     def states(key=nil)
+      #if _stack[:states]
+      #  _stack[:states] = false
+      #  return key ? [] : {}
+      #end
       return [] if key && state_suspended?(key)
+      
+      #_stack[:states] = true
       list = _states(key)
       return key ? list : list.group_by(&:name).select {|k,_| !state_suspended?(k) }
     end
@@ -81,6 +87,13 @@ module Game
     def dead_state
       raise NotImplementedError
     end
-
+    
+    def alive?
+      return states(dead_state).empty?
+    end
+    
+    def dead?
+      !alive?
+    end
   end
 end

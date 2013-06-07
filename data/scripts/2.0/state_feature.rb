@@ -43,9 +43,9 @@ module Game
 
   class Battler
     chain "StateFeatureInfluence" do
-      def _features
-        super + states.values.flat_map {|s| s.features }.flatten
-      end
+      #def _features
+      #  super + states.values.flatten.map {|s| s.features }.flatten
+      #end
 
     end
   end

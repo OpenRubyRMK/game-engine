@@ -8,6 +8,7 @@ module Game
       super
       @hp = maxhp
       @mp = maxmp
+      @stack = {}
     end
 
     def basehp
@@ -67,6 +68,11 @@ module Game
 
     def _stat_add(key)
       []
+    end
+    
+    def _stack
+      @stack ||= {}
+      return @stack
     end
   end
 end
