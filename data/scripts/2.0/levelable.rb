@@ -19,13 +19,27 @@ module RPG
       def initialize(l)
         @level = l
       end
-      
+      def parse_xml(xml)
+      end
       def _to_xml(xml)
       end
       
       def to_xml(xml)
         xml.level(:level => @level) { _to_xml(xml) }
       end
+      
+      def self.parse_xml(xml)
+        temp = new(xml[:level].to_i)
+        temp.parse_xml(xml)
+        return temp
+      end
+    end
+    
+    def parse_xml(xml)
+      super
+      xml.xpath("levelable/level").each {|node|
+        @levels[node[:level].to_i] = Level.parse_xml(node)
+      }
     end
     
     def _to_xml(xml)

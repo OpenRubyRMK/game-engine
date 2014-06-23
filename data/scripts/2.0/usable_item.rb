@@ -4,7 +4,7 @@ require_relative "chain_module"
 module RPG
   class BaseItem
     chain "UsableItem" do
-      def _parse_xml(item)
+      def parse_xml(item)
         super
         item.xpath("usable").each {|node|
           extend(EquippableItem)
@@ -34,15 +34,13 @@ module RPG
 
     def _to_xml(xml)
       super
-      xml.equippable{ _to_xml_usable(xml) }
+      xml.usable{ _to_xml_usable(xml) }
     end
 
     def _to_xml_usable(xml)
-      xml.usable{
-        xml.empty_stats {
-          @empty_stats.each{|k,v|
-            xml.stat(v,:name=>k)
-          }
+      xml.empty_stats {
+        @empty_stats.each{|k,v|
+          xml.stat(v,:name=>k)
         }
       }
     end

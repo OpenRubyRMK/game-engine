@@ -8,7 +8,7 @@ module RPG
     chain "MasteryInfluence" do
       def initialize
         super
-        @masteries = {:all => {}, :any => {}, :one => {}, :none => {}}
+        @masteries = init_check(true)
       end
       
       def _check(battler)

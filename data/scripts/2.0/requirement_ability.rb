@@ -8,7 +8,7 @@ module RPG
     chain "AbilityInfluence" do
       def initialize
         super
-        @abilities = {:all => {}, :any => {}, :one => {}, :none => {}}
+        @abilities = init_check(true)
       end
       
       def _check(battler)

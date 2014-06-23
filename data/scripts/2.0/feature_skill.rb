@@ -18,7 +18,7 @@ module RPG
         }
       end
 
-      def _parse_xml(enemy)
+      def parse_xml(enemy)
         super
         enemy.xpath("skills/skill").each {|node|
           @skills << node[:name].to_sym
@@ -46,7 +46,10 @@ module Game
   class Battler
     chain "FeatureSkillInfluence" do
       def _skills(key)
-        super + features.map {|f| f.skills(key)}.flatten
+        super + features.flat_map {|f| f.skills(key)}
+      end
+      def _available_skills(key)
+        super + features.select {|f| f.requirement.check(self) }.flat_map {|f| f.skills(key)}
       end
     end
   end

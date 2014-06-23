@@ -1,44 +1,20 @@
 require_relative "enemy"
 require_relative "battler_feature"
+require_relative "featureable"
 
 module RPG
   class Enemy
-    attr_accessor :features
-    chain "FeatureInfluence" do
-      def initialize(*)
-        super
-        @features = []
-      end
-
-      def _to_xml(xml)
-        super
-        xml.features {
-          @features.each { |feature|
-            feature.to_xml(xml)
-          }
-        }
-      end
-      def parse_xml(enemy)
-        super
-        enemy.xpath("features/feature").each {|node|
-          @features << Feature.parse_xml(node)
-        }
-      end
-
-    end
+    include Featureable
   end
 end
 
 module Game
   class Enemy
+    include Featureable
+    
     chain "FeatureInfluence" do
-      def initialize(*)
-        super
-        @enemy_features = rpg.features.map {|f| Game::Feature.new(f)}
-      end
-
       def _features
-        super + @enemy_features
+        super + @features
       end
     end
   end

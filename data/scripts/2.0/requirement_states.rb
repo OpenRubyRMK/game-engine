@@ -8,7 +8,7 @@ module RPG
     chain "AbilityInfluence" do
       def initialize
         super
-        @states = {:all => [], :any => [], :one => [], :none => []}
+        @states = init_check
       end
       
       def _check(battler)
@@ -18,6 +18,12 @@ module RPG
       def to_xml(xml)
         super
         _to_xml_array(xml,@states,"state","states")
+      end
+      
+      
+      def parse_xml(xml)
+        super
+        _parse_xml(xml,@states,"state","states")
       end
     end
   end

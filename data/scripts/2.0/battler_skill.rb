@@ -19,7 +19,15 @@ module Game
     end
 
     def skills(key=nil)
-      key ? _skills(key) : _skills(key).group_by(&:name)
+      return key ? _skills(key) : _skills(key).group_by(&:name)
+    end
+    
+    def _available_skills(key = nil)
+      return []
+    end
+    
+    def available_skills(key=nil)
+      return key ? _available_skills(key) : _available_skills(key).group_by(&:name)
     end
 
     def add_skill(k)

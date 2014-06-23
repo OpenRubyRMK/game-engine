@@ -17,5 +17,9 @@ module Game
       #_stack[:features] = true
       return _features
     end
+    
+    def available_features
+      features.select {|f| f.requirement.check(self) }
+    end
   end
 end

@@ -33,7 +33,7 @@ module RPG
 
       end
 
-      def _parse_xml(feature)
+      def parse_xml(feature)
         super
 
         feature.xpath("states_chance/state").each {|node|
@@ -78,17 +78,17 @@ module Game
   class Battler
     chain "FeatureStateInfluence" do
       def _states_chance(key)
-        super + features.map {|f|
+        super + available_features.flat_map {|f|
           key ? f.states_chance[key] || [] : f.states_chance
-        }.flatten
+        }
       end
 
       def _states(key)
-        super + features.map {|f| f.states(key)}.flatten
+        super + available_features.flat_map {|f| f.states(key)}
       end
 
       def _suspended_states
-        super + features.map {|f| f.suspend_states }.flatten
+        super + available_features.flat_map {|f| f.suspend_states }
       end
     end
   end

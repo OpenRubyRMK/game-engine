@@ -1,18 +1,6 @@
 require_relative "levelable_feature"
 require_relative "feature_skill"
 
-module RPG
-  module Levelable
-    class Level
-      
-      def skills
-        features << Feature.new if features.empty?
-        features.first.skills
-      end
-    end
-  end
-end
-
 module Game
   module Levelable
     class Level
@@ -24,7 +12,7 @@ module Game
       #  end
       #end
       def skills(key)
-        l = features.map{|f|f.skills(key)}.flatten
+        l = features.flat_map{|f|f.skills(key)}
         key ? l : l.group_by(&:name)
       end
     end

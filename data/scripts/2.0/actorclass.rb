@@ -1,5 +1,6 @@
 require_relative "actor"
 require_relative "levelable"
+require_relative "requirement"
 
 module RPG
   class Actor
@@ -17,7 +18,7 @@ module RPG
         }
       end
 
-      def _parse_xml(node)
+      def parse_xml(node)
         super
         node.xpath("actorclasses/actorclass").each {|ac|
           @actorclasses[ac["name"].to_sym]=ac["level"].to_i
@@ -29,11 +30,16 @@ module RPG
 
   class ActorClass < BaseItem
     include Levelable
+    
+    attr_reader :can_add, :can_remove
     #    attr_accessor :exp_multiplicator
     #    attr_accessor :exp
     #    attr_accessor :level_peractorlvl
     def initialize(name)
       super
+      @can_add = Requirement.new
+      @can_remove = Requirement.new
+
       #      @exp = {}
       #      100.times{|n| @exp[n] = n * 5 } #TODO find better calc
       #      @exp_multiplicator = 1.0
@@ -65,13 +71,30 @@ module Game
         }
       end
     end
-
+    
+    def _actorclass_can_add(k)
+       return [RPG::ActorClass[k].can_add.check(self)]
+    end
+    
+    def actorclass_can_add?(k)
+      return _actorclass_can_add(k).all?
+    end
+    def _actorclass_can_remove(k)
+       return [RPG::ActorClass[k].can_remove.check(self)]
+    end
+    
+    def actorclass_can_remove?(k)
+      return _actorclass_can_remove(k).all?
+    end
+    
     def add_actorclass(k)
+      return unless actorclass_can_add?(k)
+      return @actorclasses.include?(k)
       notify_observers(:added_actorclass) {
         if @removed_actorclasses.include?(k)
           @actorclasses[k] = @removed_actorclasses.delete(k)
         else
-          @actorclasses[k] ||= ActorClass.new(k,self)
+          @actorclasses[k] = ActorClass.new(k,self)
         end
       }
       return self
@@ -79,6 +102,7 @@ module Game
 
     def remove_actorclass(k)
       if @actorclasses.include?(k)
+        return unless actorclass_can_remove?(k)
         notify_observers(:remove_actorclass) {
           @removed_actorclasses[k] = @actorclasses.delete(k)
         }
@@ -95,7 +119,7 @@ module Game
 
     include Levelable
     def initialize(name,actor)
-      super(name)
+      super
       @actor = actor
       @level = 0
       @exp = 0
