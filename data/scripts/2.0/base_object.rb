@@ -118,6 +118,12 @@ module Game
       raise NotImplementedError
     end
 
+    def observe(target_event = nil)
+      Game.observe(target_event) do |event, emitter, info|
+          yield(event, emitter, info) if emitter == self
+      end
+    end
+    
     def notify_observers(event, info = {})
       if block_given?
         Game.changed
