@@ -68,7 +68,7 @@ module Game
   class Battler
     chain "ChargeSkillInfluence" do
       def _skills(key)
-        super + equips.each_value.map {|e| key ? e.charge_skills[key] : e.charge_skills.values }.flatten
+        super + equips.each_value.flat_map {|e| key ? e.charge_skills[key] : e.charge_skills.values }
       end
     end
   end

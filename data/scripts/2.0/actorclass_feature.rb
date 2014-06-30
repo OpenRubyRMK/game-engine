@@ -13,10 +13,10 @@ module Game
   class ActorClass
     include Featureable
     def features
-      list = (0).upto(level).map {|l|
+      list = (0).upto(level).flat_map {|l|
         l = @levels[l]
-        l.nil? ? [] : l.features
-      }.compact.flatten
+        l.nil? ? [] : Array(l.features)
+      }
       
       return super + list
     end
@@ -24,8 +24,8 @@ module Game
 
   class Actor
     chain "ActorClassFeatureInfluence" do
-      def _features
-        super + @actorclasses.each_value.map{|ac| ac.features }.flatten
+      def features
+        super + @actorclasses.each_value.flat_map(&:features)
       end
     end
   end

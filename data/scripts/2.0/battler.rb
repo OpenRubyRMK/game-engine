@@ -1,4 +1,4 @@
-require_relative "game_object"
+require_relative "base_object"
 
 module Game
   class Battler < BaseObject

@@ -1,4 +1,3 @@
-require_relative "base_item"
 require_relative "usable_item"
 
 module RPG
@@ -14,5 +13,10 @@ end
 module Game
   class Skill < BaseItem
     include UsableItem
+    
+    
+    def rpg
+      return RPG::Skill[@name]
+    end
   end
 end

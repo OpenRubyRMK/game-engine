@@ -2,7 +2,7 @@ require_relative "requirement"
 require_relative "battler_state"
 
 module RPG
-  class Requirement
+  class BattlerRequirement
     attr_accessor :states
     
     chain "AbilityInfluence" do
@@ -15,11 +15,14 @@ module RPG
         super + [check_array(@states,battler.states)]
       end
       
+      def _empty
+      	super + [check_empty(@states)]
+      end
+      
       def to_xml(xml)
         super
         _to_xml_array(xml,@states,"state","states")
       end
-      
       
       def parse_xml(xml)
         super

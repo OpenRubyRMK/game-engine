@@ -27,6 +27,12 @@ module RPG
       end
     end
   end
+  
+	module Featureable
+		def skills(key=nil)
+			return _list_group_by(_featureable_helper {|f| f.skills(key)}, key)
+		end
+	end
 end
 
 module Game
@@ -37,20 +43,30 @@ module Game
         @skills = rpg.skills.map{|n| Skill.new(n) }.group_by(&:name)
       end
 
-      def skills(key)
-        key ? @skills[key] || [] : @skills.values.flatten
+      def skills(key = nil)
+        key ? Array(@skills[key]) : @skills.values.flatten
       end
     end
   end
+  
+  module Featureable
+		private
 
-  class Battler
-    chain "FeatureSkillInfluence" do
-      def _skills(key)
-        super + features.flat_map {|f| f.skills(key)}
-      end
-      def _available_skills(key)
-        super + features.select {|f| f.requirement.check(self) }.flat_map {|f| f.skills(key)}
-      end
-    end
-  end
+		def _featureable_skills(key,battler = nil)
+			return _featureable_helper(battler) {|f| f.skills(key)}
+		end
+	end
+
+	class Battler
+		include Featureable
+		chain "FeatureSkillInfluence" do
+
+			def _skills(key)
+				super + _featureable_skills(key)
+			end
+			def _available_skills(key)
+				super + _featureable_skills(key, self)
+			end
+		end
+	end
 end

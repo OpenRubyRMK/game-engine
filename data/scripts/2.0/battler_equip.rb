@@ -2,6 +2,40 @@ require_relative "battler"
 #require_relative "socket"
 require_relative "equippable_item"
 
+module RPG
+	class BattlerRequirement
+    attr_reader :equipment
+    
+    chain "EquipInfluence" do
+      def initialize
+        super
+        @equipment = init_check(ItemRequirement.new)
+      end
+      
+      def to_xml(xml)
+        super
+        @equipment.each {|k,v|
+        	xml.equipment(:type => k) { v.to_xml(xml) } unless v.empty?
+    		}
+      end
+
+      def _check(battler)
+      	eq = battler.equips.values
+        super + [eq.any? {|item| @equipment[:any].check(item) }]
+      end
+      
+      def _empty
+      	super + [check_empty(@equipment)]
+      end
+      
+      def parse_xml(xml)
+        super
+        xml.xpath("equipment").each {|node| @equipment[node[:type].to_sym].parse_xml(node) }
+      end
+    end
+  end
+end
+
 module Game
   class Battler
     def equip(slot,item)

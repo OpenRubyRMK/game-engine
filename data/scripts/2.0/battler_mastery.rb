@@ -31,14 +31,7 @@ module Game
     end
 
     def mastery_rate(k=nil)
-      temp = _mastery_rate(k)
-      if k
-        return temp.inject(1.0,:*)
-      else
-        return temp.inject(Hash.new(1.0)) do |element,hash|
-          hash.merge(element) {|k,o,n| o * n}
-        end
-      end
+      return _list_combine(_mastery_rate(k), key, 1.0, :*)
     end
 
     def add_mastery(k)

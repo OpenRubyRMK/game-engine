@@ -37,8 +37,8 @@ module RPG
     #    attr_accessor :level_peractorlvl
     def initialize(name)
       super
-      @can_add = Requirement.new
-      @can_remove = Requirement.new
+      @can_add = BattlerRequirement.new
+      @can_remove = BattlerRequirement.new
 
       #      @exp = {}
       #      100.times{|n| @exp[n] = n * 5 } #TODO find better calc
@@ -89,26 +89,24 @@ module Game
     
     def add_actorclass(k)
       return unless actorclass_can_add?(k)
-      return @actorclasses.include?(k)
-      notify_observers(:added_actorclass) {
+      return if @actorclasses.include?(k)
+      return notify_observers(:added_actorclass) {
         if @removed_actorclasses.include?(k)
           @actorclasses[k] = @removed_actorclasses.delete(k)
         else
           @actorclasses[k] = ActorClass.new(k,self)
         end
       }
-      return self
     end
 
     def remove_actorclass(k)
       if @actorclasses.include?(k)
         return unless actorclass_can_remove?(k)
-        notify_observers(:remove_actorclass) {
+        return notify_observers(:remove_actorclass) {
           @removed_actorclasses[k] = @actorclasses.delete(k)
         }
         #cs_remove_actorclass(k)
       end
-      return self
     end
   end
 

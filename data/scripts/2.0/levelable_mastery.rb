@@ -1,4 +1,3 @@
-require_relative "levelable"
 require_relative "mastery"
 
 module RPG

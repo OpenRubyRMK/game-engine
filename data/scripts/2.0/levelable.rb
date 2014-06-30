@@ -56,6 +56,7 @@ end
 
 module Game
   module Levelable
+  	attr_reader :levels
     def initialize(*)
       super
       @levels = Hash[rpg.levels.map {|k,v| [k,Level.new(v)]}]
@@ -63,7 +64,7 @@ module Game
 
     class Level
       def initialize(rpg)
-
+				super unless self.class.superclass == Object
       end
     end
   end

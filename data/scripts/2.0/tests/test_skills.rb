@@ -11,18 +11,18 @@ class SkillTest < Test::Unit::TestCase
     sk = RPG::Skill.new(:iceball)
 
     en = RPG::Enemy.new(:slime)
-    en.features << RPG::Feature.new.tap{|f| f.skills << :fireball }
+    en.add_feature {|f| f.skills << :fireball }
 
     en2 = RPG::Enemy.new(:human)
     
     #set abilities
     a = RPG::Ability.new(:fireart)
-    a.add_level(1) {|lv| lv.skills << :fireball }
+    a.add_level(1) {|lv| lv.add_feature {|f| f.skills << :fireball } }
       
     RPG::Actor.new(:alex)
     ac = RPG::ActorClass.new(:warrior)
-    ac.add_level(1) {|lv| lv.skills << :fireball }
-    ac.add_level(2) {|lv| lv.skills << :iceball }
+    ac.add_level(1) {|lv| lv.add_feature {|f| f.skills << :fireball } }
+    ac.add_level(2) {|lv| lv.add_feature {|f| f.skills << :iceball } }
   end
 
   def test_enemy_skills
@@ -89,8 +89,7 @@ class SkillTest < Test::Unit::TestCase
     
     assert_empty(ga.skills)
     
-    ga.add_actorclass(:warrior)
-    ac = ga.actorclasses[:warrior]
+    ac = ga.add_actorclass(:warrior)
     
     assert_empty(ga.skills)
     assert_empty(ac.skills)

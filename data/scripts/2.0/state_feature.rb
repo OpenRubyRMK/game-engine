@@ -1,6 +1,6 @@
 require_relative "battler_state"
 require_relative "battler_feature"
-require_relative "featureable"
+
 module RPG
   class State
     include Featureable
@@ -14,9 +14,9 @@ module Game
 
   class Battler
     chain "StateFeatureInfluence" do
-      #def _features
-      #  super + states.values.flatten.map {|s| s.features }.flatten
-      #end
+      def features
+        super + states.values.flatten.flat_map(&:features)
+      end
 
     end
   end

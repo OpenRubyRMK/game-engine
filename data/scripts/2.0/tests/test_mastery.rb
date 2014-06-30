@@ -15,7 +15,7 @@ require_relative "../armor"
 class MasteryTest < Test::Unit::TestCase
   def self.startup
     m = RPG::Mastery.new(:axe)
-    m.add_level(1) {|l| l.skills << :axe_slash }
+    m.add_level(1) {|l| l.add_feature {|f| f.skills << :axe_slash } }
 
     w = RPG::Weapon.new(:fire_axe)
     w.equip_type = :axe

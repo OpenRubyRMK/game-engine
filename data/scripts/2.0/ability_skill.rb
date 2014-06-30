@@ -1,22 +1,13 @@
-require_relative "battler_ability"
-require_relative "battler_skill"
+require_relative "ability_feature"
 require_relative "levelable_skill"
 
 module Game
   class Ability
     def skills(k=nil)
-      if l = @levels[level]
-        return l.skills(k)
-      end
-      return k ? [] : {}
+      return _list_group_by(_featureable_skills(k), k)
     end
-  end
-
-  class Battler
-    chain "AbilitySkillInfluence" do
-      def _skills(key)
-        super + @abilities.each_value.map{|ab| key ? ab.skills(key) : ab.skills.values }.flatten
-      end
+    def available_skills(k=nil)
+      return _list_group_by(_featureable_skills(k, @battler), k)
     end
   end
 end

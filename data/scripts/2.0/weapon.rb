@@ -1,4 +1,3 @@
-require_relative "base_item"
 require_relative "equippable_item"
 
 module RPG
@@ -9,6 +8,9 @@ end
 
 module Game
   class Weapon < BaseItem
+	  def rpg
+      return RPG::Weapon[@name]
+    end
     include EquippableItem
   end
 end

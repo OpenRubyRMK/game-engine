@@ -12,7 +12,7 @@ end
 module Game
   module Levelable
     class Level
-      prepend Featureable
+      include Featureable
     end
   end
 end

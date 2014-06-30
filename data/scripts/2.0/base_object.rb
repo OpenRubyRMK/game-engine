@@ -1,4 +1,5 @@
 require "nokogiri"
+require "observer"
 
 module RPG
   class BaseObject
@@ -90,4 +91,55 @@ module RPG
       end
     end
   end
+end
+
+
+module Game
+  extend Observable
+  def self.observe(target_event = nil)
+    callback = lambda do |event, emitter, info|
+      yield(event, emitter, info) if !target_event || event == target_event
+    end
+
+    add_observer(callback, :call)
+  end
+
+  class BaseObject
+    attr_reader :name
+    def initialize(name,*)
+      @name = name
+    end
+
+    def to_sym
+      return @name
+    end
+
+    def rpg
+      raise NotImplementedError
+    end
+
+    def notify_observers(event, info = {})
+      if block_given?
+        Game.changed
+        info = yield
+      end
+      Game.notify_observers(event, self, info)
+      info
+    end
+
+		private
+		def _list_group_by(list, k)
+			return k ? list : list.group_by(&:name)
+		end
+		
+		def _list_combine(list, key, default, sym)
+			if key
+				return list.map {|h| h[key] }.inject(default,sym)
+			else
+				return temp.inject(Hash.new(default)) do |element,hash|
+					hash.merge(element) {|k,o,n| o.send(sym,n)}
+				end
+			end
+		end
+	end
 end

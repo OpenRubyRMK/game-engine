@@ -1,8 +1,7 @@
-require_relative "requirement"
 require_relative "battler_mastery"
 
 module RPG
-  class Requirement
+  class BattlerRequirement
     attr_accessor :masteries
     
     chain "MasteryInfluence" do
@@ -15,9 +14,18 @@ module RPG
         super + [check_array_level(@masteries,battler.mastery)]
       end
       
+      def _empty
+      	super + [check_empty(@masteries)]
+      end
+      
       def to_xml(xml)
         super
         _to_xml_array(xml,@masteries,"mastery","masteries")
+      end
+      
+      def parse_xml(xml)
+        super
+        _parse_xml(xml,@masteries,"mastery","masteries",true)
       end
     end
   end

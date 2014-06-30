@@ -17,23 +17,12 @@ module RPG
 end
 
 module Game
-  class BaseItem
-    attr_reader :name
-    def initialize(name)
-      @name = name
-    end
-
-    def to_sym
-      return @name
-    end
-
-    def rpg
-      return RPG::BaseItem[@name]
-    end
+  class BaseItem < BaseObject
 
     def price
       return stat(:price,rpg.price)
     end
+    
     private
 
     def _stat_sum(key,type)

@@ -44,14 +44,7 @@ module Game
     end
 
     def states_chance(key=nil)
-      temp = _states_chance(key)
-      if key
-        return temp.inject(1.0,:*)
-      else
-        return temp.inject(Hash.new(1.0)) do |element,hash|
-          hash.merge(element) {|k,o,n| o * n}
-        end
-      end
+      return _list_combine(_states_chance(key), key, 1.0, :*)
     end
 
     def add_state(k)
@@ -60,9 +53,13 @@ module Game
         if(@states[k].size > temp.rpg.stocks)
           remove_state(k)
         end
-        #states_cancel
-        temp.rpg.states_cancel.each {|c|  @states[c].each{remove_state(c)} }
-        @states[k] += [temp]
+				
+				#states_cancel
+				if temp.respond_to?(:states_cancel)
+					temp.states_cancel.each {|c|  @states[c].each{remove_state(c)} }
+				end
+				
+				@states[k] += [temp]
 
         temp
       }
@@ -80,9 +77,9 @@ module Game
       return key ? @states[key] : (@states || {}).values.flatten
     end
 
-    def _states_chance(key=nil)
-      return _states(nil).map { |s| key ? s.states_chance[key] : s.states_chance }
-    end
+		def _states_chance(key)
+			[]
+		end
 
     def dead_state
       raise NotImplementedError

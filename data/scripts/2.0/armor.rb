@@ -1,4 +1,3 @@
-require_relative "base_item"
 require_relative "equippable_item"
 
 module RPG

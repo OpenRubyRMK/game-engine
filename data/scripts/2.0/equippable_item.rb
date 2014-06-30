@@ -1,7 +1,6 @@
 require_relative "base_item"
 require_relative "chain_module"
 require_relative "requirement"
-require_relative "selector"
 
 module RPG
   class BaseItem
@@ -38,7 +37,7 @@ module RPG
       @equip_stats=Hash.new(0)
       @equip_stats_multi=Hash.new(1.0)
 
-      @equip_requirement = Requirement.new
+      @equip_requirement = BattlerRequirement.new
 
       @durability = nil
 
@@ -77,31 +76,33 @@ module RPG
     end
     
   end
+  
+  
 
-  class Selector
-    attr_reader :equip_type
-    attr_reader :name
+#  class Selector
+#    attr_reader :equip_type
+#    attr_reader :name
 
-    chain "EquippableItemInfluence" do
-      def initialize
-        super
-        @equip_type = {:all => [], :any => [], :one => [], :none => [] }
-        @name = {:all => [], :any => [], :one => [], :none => [] }
-      end
+#    chain "EquippableItemInfluence" do
+#      def initialize
+#        super
+#        @equip_type = {:all => [], :any => [], :one => [], :none => [] }
+#        @name = {:all => [], :any => [], :one => [], :none => [] }
+#      end
 
-      def _check(item)
-        super +
-        [check_value(@equip_type,item.equip_type),
-          check_value(@name,item.name)]
-      end
+#      def _check(item)
+#        super +
+#        [check_value(@equip_type,item.equip_type),
+#          check_value(@name,item.name)]
+#      end
 
-      def to_xml(xml)
-        super
-        _to_xml_value(xml,@name,"name","names")
-        _to_xml_value(xml,@equip_type,"type","equip_types")
-      end
-    end
-  end
+#      def to_xml(xml)
+#        super
+#        _to_xml_value(xml,@name,"name","names")
+#        _to_xml_value(xml,@equip_type,"type","equip_types")
+#      end
+#    end
+#  end
 end
 
 module Game

@@ -12,9 +12,19 @@ module RPG
     
     end
     
+    def empty?
+    	_empty.all?
+    end
+    
     private
     def init_check(lev = false)
-      d = lev ? {} : []
+      case lev
+      when true, false
+      	d = lev ? {} : []
+    	else
+    		d = lev
+    	end
+    	
       {:all => d.dup, :any => d.dup, :one => d.dup, :none => d.dup}
     end
     
@@ -34,6 +44,14 @@ module RPG
 
     def _check(battler)
       []
+    end
+    
+    def _empty
+    	[]
+    end
+    
+    def check_empty(val)
+      val.each_value.all?(&:empty?)
     end
     
     def _parse_xml(xml,val,name,plural_name,levl = false)
@@ -58,5 +76,11 @@ module RPG
       }
     end
 
+  end
+  
+  class BattlerRequirement < Requirement
+  end
+  
+  class ItemRequirement < Requirement
   end
 end

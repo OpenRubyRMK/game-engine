@@ -1,5 +1,4 @@
 require_relative "base_object"
-require_relative "game_object"
 require_relative "levelable"
 
 module RPG

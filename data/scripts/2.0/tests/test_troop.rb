@@ -31,7 +31,7 @@ class TroopTest < Test::Unit::TestCase
     assert_equal(3,g.alive_members.size)
     assert_equal(0,g.dead_members.size)
     
-    assert_not_equal(g.map(&:name),:slime) #because each slime is replaced
+    assert_not_include(g.map(&:name),:slime) #because each slime is replaced
     
     3.times {|i|
       assert_equal(10,g.to_a[i].hp)      

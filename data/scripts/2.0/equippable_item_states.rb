@@ -1,4 +1,3 @@
-require_relative "battler_equip"
 require_relative "equippable_item_features"
 require_relative "feature_state"
 require_relative "requirement_states"
@@ -12,7 +11,7 @@ module Game
     end
     
     def auto_states(key=nil)
-      list = equip_features.map {|f| f.states(key) }.flatten
+      list = equip_features.flat_map {|f| f.states(key) }
       return key ? list : list.group_by(&:name)
     end
   end

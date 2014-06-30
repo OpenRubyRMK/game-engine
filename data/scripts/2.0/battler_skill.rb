@@ -1,8 +1,6 @@
 require_relative "battler"
 require_relative "skill"
 
-require_relative "chain_module"
-
 module Game
   class Battler
 
@@ -19,7 +17,7 @@ module Game
     end
 
     def skills(key=nil)
-      return key ? _skills(key) : _skills(key).group_by(&:name)
+      return _list_group_by(_skills(key), key)
     end
     
     def _available_skills(key = nil)
@@ -27,7 +25,7 @@ module Game
     end
     
     def available_skills(key=nil)
-      return key ? _available_skills(key) : _available_skills(key).group_by(&:name)
+      return _list_group_by(_available_skills(key), key)
     end
 
     def add_skill(k)
@@ -38,7 +36,7 @@ module Game
     end
 
     def remove_skill(k)
-      unless(@skills[k].empty?)
+      unless @skills[k].empty?
         return notify_observers(:removed_skill) { @skills[k].shift }
       else
         return nil

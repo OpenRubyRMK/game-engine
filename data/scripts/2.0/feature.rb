@@ -4,7 +4,7 @@ module RPG
   class Feature
     attr_reader :requirement
     def initialize
-      @requirement = Requirement.new
+      @requirement = BattlerRequirement.new
     end
     
     def _to_xml(xml)

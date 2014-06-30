@@ -1,4 +1,3 @@
-require_relative "game_object"
 require_relative "battler_state"
 
 module Game

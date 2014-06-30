@@ -17,14 +17,14 @@ class FeatureTest < Test::Unit::TestCase
     RPG::Skill.new(:fireball)
 
     w = RPG::Weapon.new(:fire_axe)
-    w.equip_features << RPG::Feature.new.tap {|f| f.auto_states << :burn }
+    w.equipable_features.add_feature {|f| f.auto_states << :burn }
 
       
     w = RPG::Weapon.new(:mage_staff)
-    w.equip_features << RPG::Feature.new.tap {|f| f.skills << :fireball }
+    w.equipable_features.add_feature {|f| f.skills << :fireball }
     
     e = RPG::Enemy.new(:dragon)
-    e.features << RPG::Feature.new.tap {|f| f.skills << :fireball }
+    e.add_feature {|f| f.skills << :fireball }
   end
 
   def test_states
@@ -36,6 +36,8 @@ class FeatureTest < Test::Unit::TestCase
     assert_empty(g.states(:burn))
     
     g.equip(:hand,w)
+    
+    p g.features
     
     assert_not_empty(g.states)
     assert_not_empty(g.states(:burn))
