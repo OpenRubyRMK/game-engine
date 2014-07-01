@@ -124,6 +124,12 @@ module Game
       end
     end
     
+    def self.observe(target_event = nil)
+      Game.observe(target_event) do |event, emitter, info|
+          yield(event, emitter, info) if emitter.is_a?(self)
+      end
+    end
+    
     def notify_observers(event, info = {})
       if block_given?
         Game.changed
